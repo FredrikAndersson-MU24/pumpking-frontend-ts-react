@@ -88,6 +88,11 @@ function App() {
         }
     }, [time]);
 
+    const handleWater = () => {
+        setWaterScore((a: number[]) => [...a, time,]);
+        console.log(waterScore)
+    }
+
     return (
         <>
             <p>
@@ -95,6 +100,8 @@ function App() {
             </p>
             <button onClick={handleResetGame}>Reset</button>
             <button onClick={handleStartGame}>Start</button>
+            <button onClick={handleWater}>Water</button>
+            <p>Water: {waterScore}</p>
         </>
     )
 }
