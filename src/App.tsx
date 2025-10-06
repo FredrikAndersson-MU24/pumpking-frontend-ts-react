@@ -4,7 +4,7 @@ import './App.css'
 interface Game {
     day: number;
     timeOfDay: number;
-    waterScore: number;
+    waterScore: Array<number>;
     fertilizerScore: number;
     weedsScore: number;
     totalScore: number;
@@ -14,7 +14,7 @@ interface Game {
 function App() {
     const [day, setDay] = useState<number>(0);
     const [time, setTime] = useState<number>(0);
-    const [waterScore, setWaterScore] = useState<number>(0);
+    const [waterScore, setWaterScore] = useState<Array<number>>([]);
     const [fertilizerScore, setFertilizerScore] = useState<number>(0);
     const [weedsScore, setWeedsScore] = useState<number>(0);
     const [totalScore, setTotalScore] = useState<number>(0);
@@ -26,7 +26,7 @@ function App() {
         setActive(false);
         setDay(0);
         setTime(0);
-        setWaterScore(0);
+        setWaterScore([]);
         setFertilizerScore(0);
         setWeedsScore(0);
         setTotalScore(0);
