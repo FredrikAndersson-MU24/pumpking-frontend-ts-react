@@ -93,6 +93,11 @@ function App() {
         console.log(waterScore)
     }
 
+    const handleFertilizer = () => {
+        setFertilizerScore((a: number[]) => [...a, time,]);
+        console.log(fertilizerScore)
+    }
+
     return (
         <>
             <p>
@@ -102,6 +107,8 @@ function App() {
             <button onClick={handleStartGame}>Start</button>
             <button onClick={handleWater}>Water</button>
             <p>Water: {waterScore}</p>
+            <button onClick={handleFertilizer}>Fertilize</button>
+            <p>Water: {fertilizerScore}</p>
         </>
     )
 }
