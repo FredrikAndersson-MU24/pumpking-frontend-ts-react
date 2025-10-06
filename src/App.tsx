@@ -8,12 +8,12 @@ interface Game {
     fertilizerScore: Array<number>;
     weedsScore: number;
     totalScore: number;
-    userName: number;
+    userName?: number;
 }
 
 function App() {
     const [day, setDay] = useState<number>(0);
-    const [time, setTime] = useState<number>(0);
+    const [timeOfDay, setTimeOfDay] = useState<number>(0);
     const [waterScore, setWaterScore] = useState<Array<number>>([]);
     const [fertilizerScore, setFertilizerScore] = useState<Array<number>>([]);
     const [weedsScore, setWeedsScore] = useState<number>(0);
@@ -25,12 +25,12 @@ function App() {
     const handleResetGame = () => {
         setActive(false);
         setDay(0);
-        setTime(0);
+        setTimeOfDay(0);
         setWaterScore([]);
         setFertilizerScore([]);
         setWeedsScore(0);
         setTotalScore(0);
-        console.log(day, time, waterScore, fertilizerScore, weedsScore, totalScore);
+        console.log(day, timeOfDay, waterScore, fertilizerScore, weedsScore, totalScore);
     }
 
     const handleStartGame = () => {
@@ -45,10 +45,10 @@ function App() {
         console.log("log from timer")
         if (isActive) {
             const timeKeeper = () => {
-                if (time < 7) {
-                    setTime(prevTime => prevTime + 1);
+                if (timeOfDay < 7) {
+                    setTimeOfDay(prevTime => prevTime + 1);
                 } else {
-                    setTime(0);
+                    setTimeOfDay(0);
                     setDay(prevDay => prevDay + 1);
                 }
             };
@@ -57,10 +57,10 @@ function App() {
             }
         }
         return () => clearInterval(intervalId);
-    }, [isActive, time, day]);
+    }, [isActive, timeOfDay, day]);
 
     useEffect(() => {
-        switch (time) {
+        switch (timeOfDay) {
             case 0:
                 setClock("00:00");
                 break;
@@ -86,15 +86,15 @@ function App() {
                 setClock("21:00");
                 break;
         }
-    }, [time]);
+    }, [timeOfDay]);
 
     const handleWater = () => {
-        setWaterScore((a: number[]) => [...a, time,]);
+        setWaterScore((a: number[]) => [...a, timeOfDay,]);
         console.log(waterScore)
     }
 
     const handleFertilizer = () => {
-        setFertilizerScore((a: number[]) => [...a, time,]);
+        setFertilizerScore((a: number[]) => [...a, timeOfDay,]);
         console.log(fertilizerScore)
     }
 
