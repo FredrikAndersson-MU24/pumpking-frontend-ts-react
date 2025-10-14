@@ -48,7 +48,7 @@ function App() {
     };
 
     useEffect(() => {
-        if (currentGame.timeOfDay && isActive) {
+        if (isActive) {
             localStorage.setItem('game', JSON.stringify(currentGame));
         }
     }, [currentGame, isActive]);
