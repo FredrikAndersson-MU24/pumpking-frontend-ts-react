@@ -60,22 +60,31 @@ function App() {
         console.log("log from timer")
         if (isActive) {
             const timeKeeper = () => {
-                if (timeOfDay < 7) {
-                    setTimeOfDay(prevTime => prevTime + 1);
+                if (currentGame.timeOfDay < 7) {
+                    setCurrentGame(prev => ({
+                        ...prev,
+                        timeOfDay: prev.timeOfDay + 1
+                    }));
                 } else {
-                    setTimeOfDay(0);
-                    setDay(prevDay => prevDay + 1);
+                    setCurrentGame(prev => ({
+                        ...prev,
+                        timeOfDay: 0,
+                        dayCount: prev.dayCount + 1,
+                        waterScore: [],
+                        fertilizerScore: []
+                    }));
                 }
             };
-            if (day < 30) {
+            if (currentGame.dayCount < 30) {
                 intervalId = setInterval(timeKeeper, 1000); //Fine tune timeout
             }
         }
         return () => clearInterval(intervalId);
-    }, [isActive, timeOfDay, day]);
+    }, [isActive, currentGame.timeOfDay, currentGame.dayCount]);
+
 
     useEffect(() => {
-        switch (timeOfDay) {
+        switch (currentGame.timeOfDay) {
             case 0:
                 setClock("00:00");
                 break;
@@ -101,29 +110,35 @@ function App() {
                 setClock("21:00");
                 break;
         }
-    }, [timeOfDay]);
+    }, [currentGame.timeOfDay]);
 
     const handleWater = () => {
-        setWaterScore((a: number[]) => [...a, timeOfDay,]);
+        setCurrentGame(prevState => ({
+            ...prevState,
+            waterScore: [...prevState.waterScore, prevState.timeOfDay]
+        }));
         console.log(waterScore)
     }
 
     const handleFertilizer = () => {
-        setFertilizerScore((a: number[]) => [...a, timeOfDay,]);
+        setCurrentGame(prevState => ({
+            ...prevState,
+            fertilizerScore: [...prevState.fertilizerScore, prevState.timeOfDay]
+        }));
         console.log(fertilizerScore)
     }
 
     return (
         <>
             <p>
-                Time: {clock} Days left: {30 - day}
+                Time: {clock} Days left: {30 - currentGame.dayCount}
             </p>
             <button onClick={handleResetGame}>Reset</button>
             <button onClick={handleStartGame}>Start</button>
             <button onClick={handleWater}>Water</button>
-            <p>Water: {waterScore}</p>
+            <p>Water: {currentGame.waterScore}</p>
             <button onClick={handleFertilizer}>Fertilize</button>
-            <p>Water: {fertilizerScore}</p>
+            <p>Water: {currentGame.fertilizerScore}</p>
         </>
     )
 }
