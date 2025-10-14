@@ -132,8 +132,6 @@ function App() {
                 Time: {clock} Days left: {30 - currentGame.dayCount}
             </p>
             <button onClick={handleResetGame}>Reset</button>
-            <button onClick={handleStartGame}>Start</button>
-            <button onClick={handleWater}>Water</button>
             <button onClick={handleTogglePlayPauseGame}>{isActive ? "Pause" : "Start"}</button>
             <p>Water: {currentGame.waterScore}</p>
             <button onClick={handleFertilizer}>Fertilize</button>
