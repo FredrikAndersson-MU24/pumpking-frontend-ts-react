@@ -39,13 +39,7 @@ function App() {
     const handleResetGame = () => {
         setCurrentGame(defaultGame);
         setActive(false);
-        setDay(0);
-        setTimeOfDay(0);
-        setWaterScore([]);
-        setFertilizerScore([]);
-        setWeedsScore(0);
-        setTotalScore(0);
-        console.log(day, timeOfDay, waterScore, fertilizerScore, weedsScore, totalScore);
+        console.log(dayCount, timeOfDay, waterScore, fertilizerScore, weedsScore, totalScore);
     }
 
     const handleStartGame = () => {
