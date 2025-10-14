@@ -25,6 +25,16 @@ function App() {
 //    const [userName, setUserName] = useState<string>("");
     const [clock, setClock] = useState<string>("");
     const [isActive, setActive] = useState<boolean>(false);
+    const [currentGame, setCurrentGame] = useState<Game>(() => {
+        try {
+            const savedGame = localStorage.getItem('game');
+            return savedGame ? JSON.parse(savedGame) : defaultGame;
+        } catch (e) {
+            console.log(e)
+            return defaultGame;
+        }
+    });
+    const {dayCount, timeOfDay, waterScore, fertilizerScore, weedsScore, totalScore} = currentGame;
 
     const handleResetGame = () => {
         setActive(false);
