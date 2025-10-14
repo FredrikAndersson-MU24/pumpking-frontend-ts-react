@@ -2,35 +2,44 @@ import {useEffect, useState} from 'react'
 import './App.css'
 
 interface Game {
-    day: number;
+    dayCount: number;
     timeOfDay: number;
     waterScore: Array<number>;
     fertilizerScore: Array<number>;
     weedsScore: number;
     totalScore: number;
-    userName: number;
+    userName?: number;
 }
 
 function App() {
-    const [day, setDay] = useState<number>(0);
-    const [time, setTime] = useState<number>(0);
-    const [waterScore, setWaterScore] = useState<Array<number>>([]);
-    const [fertilizerScore, setFertilizerScore] = useState<Array<number>>([]);
-    const [weedsScore, setWeedsScore] = useState<number>(0);
-    const [totalScore, setTotalScore] = useState<number>(0);
-    const [userName, setUserName] = useState<string>("");
+    const defaultGame: Game = {
+        dayCount: 0,
+        timeOfDay: 0,
+        waterScore: [],
+        fertilizerScore: [],
+        weedsScore: 0,
+        totalScore: 0,
+        userName: undefined
+    };
+
+//    const [userName, setUserName] = useState<string>("");
     const [clock, setClock] = useState<string>("");
     const [isActive, setActive] = useState<boolean>(false);
+    const [currentGame, setCurrentGame] = useState<Game>(() => {
+        try {
+            const savedGame = localStorage.getItem('game');
+            return savedGame ? JSON.parse(savedGame) : defaultGame;
+        } catch (e) {
+            console.log(e)
+            return defaultGame;
+        }
+    });
+    const {dayCount, timeOfDay, waterScore, fertilizerScore, weedsScore, totalScore} = currentGame;
 
     const handleResetGame = () => {
+        setCurrentGame(defaultGame);
         setActive(false);
-        setDay(0);
-        setTime(0);
-        setWaterScore([]);
-        setFertilizerScore([]);
-        setWeedsScore(0);
-        setTotalScore(0);
-        console.log(day, time, waterScore, fertilizerScore, weedsScore, totalScore);
+        console.log(dayCount, timeOfDay, waterScore, fertilizerScore, weedsScore, totalScore);
     }
 
     const handleStartGame = () => {
@@ -41,26 +50,41 @@ function App() {
     };
 
     useEffect(() => {
+        if (currentGame.timeOfDay && isActive) {
+            localStorage.setItem('game', JSON.stringify(currentGame));
+        }
+    }, [currentGame, isActive]);
+
+    useEffect(() => {
         let intervalId: number;
         console.log("log from timer")
         if (isActive) {
             const timeKeeper = () => {
-                if (time < 7) {
-                    setTime(prevTime => prevTime + 1);
+                if (currentGame.timeOfDay < 7) {
+                    setCurrentGame(prev => ({
+                        ...prev,
+                        timeOfDay: prev.timeOfDay + 1
+                    }));
                 } else {
-                    setTime(0);
-                    setDay(prevDay => prevDay + 1);
+                    setCurrentGame(prev => ({
+                        ...prev,
+                        timeOfDay: 0,
+                        dayCount: prev.dayCount + 1,
+                        waterScore: [],
+                        fertilizerScore: []
+                    }));
                 }
             };
-            if (day < 30) {
+            if (currentGame.dayCount < 30) {
                 intervalId = setInterval(timeKeeper, 1000); //Fine tune timeout
             }
         }
         return () => clearInterval(intervalId);
-    }, [isActive, time, day]);
+    }, [isActive, currentGame.timeOfDay, currentGame.dayCount]);
+
 
     useEffect(() => {
-        switch (time) {
+        switch (currentGame.timeOfDay) {
             case 0:
                 setClock("00:00");
                 break;
@@ -86,29 +110,35 @@ function App() {
                 setClock("21:00");
                 break;
         }
-    }, [time]);
+    }, [currentGame.timeOfDay]);
 
     const handleWater = () => {
-        setWaterScore((a: number[]) => [...a, time,]);
+        setCurrentGame(prevState => ({
+            ...prevState,
+            waterScore: [...prevState.waterScore, prevState.timeOfDay]
+        }));
         console.log(waterScore)
     }
 
     const handleFertilizer = () => {
-        setFertilizerScore((a: number[]) => [...a, time,]);
+        setCurrentGame(prevState => ({
+            ...prevState,
+            fertilizerScore: [...prevState.fertilizerScore, prevState.timeOfDay]
+        }));
         console.log(fertilizerScore)
     }
 
     return (
         <>
             <p>
-                Time: {clock} Days left: {30 - day}
+                Time: {clock} Days left: {30 - currentGame.dayCount}
             </p>
             <button onClick={handleResetGame}>Reset</button>
             <button onClick={handleStartGame}>Start</button>
             <button onClick={handleWater}>Water</button>
-            <p>Water: {waterScore}</p>
+            <p>Water: {currentGame.waterScore}</p>
             <button onClick={handleFertilizer}>Fertilize</button>
-            <p>Water: {fertilizerScore}</p>
+            <p>Water: {currentGame.fertilizerScore}</p>
         </>
     )
 }
