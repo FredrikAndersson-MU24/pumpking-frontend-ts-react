@@ -42,15 +42,13 @@ function App() {
         console.log(dayCount, timeOfDay, waterScore, fertilizerScore, weedsScore, totalScore);
     }
 
-    const handleStartGame = () => {
-        if (!isActive) {
-            setActive(prevActive => !prevActive);
-            console.log(isActive);
-        }
+    const handleTogglePlayPauseGame = () => {
+        setActive(prevActive => !prevActive);
+        console.log(isActive);
     };
 
     useEffect(() => {
-        if (currentGame.timeOfDay && isActive) {
+        if (isActive) {
             localStorage.setItem('game', JSON.stringify(currentGame));
         }
     }, [currentGame, isActive]);
@@ -134,10 +132,11 @@ function App() {
                 Time: {clock} Days left: {30 - currentGame.dayCount}
             </p>
             <button onClick={handleResetGame}>Reset</button>
-            <button onClick={handleStartGame}>Start</button>
-            <button onClick={handleWater}>Water</button>
+            <button onClick={handleTogglePlayPauseGame}>{isActive ? "Pause" : "Start"}</button>
+            <br/>
+            <button onClick={handleWater} disabled={!isActive}>Water</button>
             <p>Water: {currentGame.waterScore}</p>
-            <button onClick={handleFertilizer}>Fertilize</button>
+            <button onClick={handleFertilizer} disabled={!isActive}>Fertilize</button>
             <p>Water: {currentGame.fertilizerScore}</p>
         </>
     )
