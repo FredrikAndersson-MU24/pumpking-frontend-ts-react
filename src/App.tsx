@@ -12,13 +12,17 @@ interface Game {
 }
 
 function App() {
-    const [day, setDay] = useState<number>(0);
-    const [timeOfDay, setTimeOfDay] = useState<number>(0);
-    const [waterScore, setWaterScore] = useState<Array<number>>([]);
-    const [fertilizerScore, setFertilizerScore] = useState<Array<number>>([]);
-    const [weedsScore, setWeedsScore] = useState<number>(0);
-    const [totalScore, setTotalScore] = useState<number>(0);
-    const [userName, setUserName] = useState<string>("");
+    const defaultGame: Game = {
+        dayCount: 0,
+        timeOfDay: 0,
+        waterScore: [],
+        fertilizerScore: [],
+        weedsScore: 0,
+        totalScore: 0,
+        userName: undefined
+    };
+
+//    const [userName, setUserName] = useState<string>("");
     const [clock, setClock] = useState<string>("");
     const [isActive, setActive] = useState<boolean>(false);
 
