@@ -50,6 +50,12 @@ function App() {
     };
 
     useEffect(() => {
+        if (currentGame.timeOfDay && isActive) {
+            localStorage.setItem('game', JSON.stringify(currentGame));
+        }
+    }, [currentGame, isActive]);
+
+    useEffect(() => {
         let intervalId: number;
         console.log("log from timer")
         if (isActive) {
