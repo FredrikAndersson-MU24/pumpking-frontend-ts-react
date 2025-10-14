@@ -42,11 +42,9 @@ function App() {
         console.log(dayCount, timeOfDay, waterScore, fertilizerScore, weedsScore, totalScore);
     }
 
-    const handleStartGame = () => {
-        if (!isActive) {
-            setActive(prevActive => !prevActive);
-            console.log(isActive);
-        }
+    const handleTogglePlayPauseGame = () => {
+        setActive(prevActive => !prevActive);
+        console.log(isActive);
     };
 
     useEffect(() => {
