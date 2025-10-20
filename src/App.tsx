@@ -5,7 +5,7 @@ interface Game {
     dayCount: number;
     timeOfDay: number;
     waterScore: Array<number>;
-    fertilizerScore: Array<number>;
+    fertilizerScore: boolean;
     weedsScore: number;
     totalScore: number;
     userName?: number;
