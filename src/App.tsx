@@ -56,6 +56,48 @@ function App() {
         }
     }, [currentGame, isActive]);
 
+    const handleDayTick = useCallback(async () => {
+        try {
+            let response: AxiosResponse;
+            if (currentGame.id === undefined) {
+                response = await api.post('games/daytick',
+                    {
+                        "day": currentGame.dayCount,
+                        "timeOfDay": currentGame.timeOfDay,
+                        "waterScore": currentGame.waterScore,
+                        "fertilizerScore": currentGame.fertilizerScore,
+                        "weedsScore": 0
+                    })
+            } else {
+                response = await api.post('games/daytick',
+                    {
+                        "id": currentGame.id,
+                        "day": currentGame.dayCount,
+                        "timeOfDay": currentGame.timeOfDay,
+                        "waterScore": currentGame.waterScore,
+                        "fertilizerScore": currentGame.fertilizerScore,
+                        "weedsScore": 0
+                    })
+            }
+            const totalScore = response.data.totalScore;
+            if (totalScore !== undefined) {
+                setCurrentGame(prev => ({
+                    ...prev,
+                    id: response.data.id,
+                    timeOfDay: 0,
+                    dayCount: prev.dayCount + 1,
+                    waterScore: [],
+                    fertilizerScore: false,
+                    totalScore: totalScore
+                }));
+            }
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) || error.response) {
+                console.log("Error: " + error);
+            }
+        }
+    }, [currentGame]);
+
     useEffect(() => {
         let intervalId: number;
         console.log("log from timer")
