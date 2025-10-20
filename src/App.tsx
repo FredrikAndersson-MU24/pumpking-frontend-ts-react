@@ -16,7 +16,7 @@ function App() {
         dayCount: 0,
         timeOfDay: 0,
         waterScore: [],
-        fertilizerScore: [],
+        fertilizerScore: false,
         weedsScore: 0,
         totalScore: 0,
         userName: undefined
@@ -121,7 +121,7 @@ function App() {
     const handleFertilizer = () => {
         setCurrentGame(prevState => ({
             ...prevState,
-            fertilizerScore: [...prevState.fertilizerScore, prevState.timeOfDay]
+            fertilizerScore: true
         }));
         console.log(fertilizerScore)
     }
@@ -136,7 +136,7 @@ function App() {
             <br/>
             <button onClick={handleWater} disabled={!isActive}>Water</button>
             <p>Water: {currentGame.waterScore}</p>
-            <button onClick={handleFertilizer} disabled={!isActive}>Fertilize</button>
+            <button onClick={handleFertilizer} disabled={!isActive || currentGame.fertilizerScore}>Fertilize</button>
             <p>Water: {currentGame.fertilizerScore}</p>
         </>
     )
