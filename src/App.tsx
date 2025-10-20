@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react'
 import './App.css'
 
 interface Game {
+    id?: number,
     dayCount: number;
     timeOfDay: number;
     waterScore: Array<number>;
