@@ -38,6 +38,7 @@ function App() {
         }
     });
     const {dayCount, timeOfDay, waterScore, fertilizerScore, weedsScore, totalScore} = currentGame;
+    const [waitingForAPI, setWaitingForAPI] = useState<boolean>(false);
 
     const handleResetGame = () => {
         setCurrentGame(defaultGame);
@@ -102,20 +103,21 @@ function App() {
         let intervalId: number;
         console.log("log from timer")
         if (isActive) {
-            const timeKeeper = () => {
+            const timeKeeper = async () => {
                 if (currentGame.timeOfDay < 7) {
                     setCurrentGame(prev => ({
                         ...prev,
                         timeOfDay: prev.timeOfDay + 1
                     }));
-                } else {
-                    setCurrentGame(prev => ({
-                        ...prev,
-                        timeOfDay: 0,
-                        dayCount: prev.dayCount + 1,
-                        waterScore: [],
-                        fertilizerScore: []
-                    }));
+                } else if (!waitingForAPI) {
+                    setWaitingForAPI(true);
+                    try {
+                        await handleDayTick();
+                    } catch (error) {
+                        console.error("Failed to handle day tick:", error);
+                    } finally {
+                        setWaitingForAPI(false);
+                    }
                 }
             };
             if (currentGame.dayCount < 30) {
