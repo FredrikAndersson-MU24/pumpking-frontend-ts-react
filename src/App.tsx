@@ -125,7 +125,7 @@ function App() {
             }
         }
         return () => clearInterval(intervalId);
-    }, [isActive, currentGame.timeOfDay, currentGame.dayCount]);
+    }, [isActive, currentGame.timeOfDay, currentGame.dayCount, handleDayTick, waitingForAPI]);
 
 
     useEffect(() => {
