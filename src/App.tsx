@@ -123,7 +123,7 @@ function App() {
                 }
             };
             if (currentGame.dayCount < 30) {
-                intervalId = setInterval(timeKeeper, 1000); //Fine tune timeout
+                intervalId = setInterval(timeKeeper, 500); //Fine tune timeout
             }
         }
         return () => clearInterval(intervalId);
@@ -224,19 +224,35 @@ function App() {
 
     return (
         <>
-            <p>
-                Time: {clock} Days left: {30 - currentGame.dayCount}
-            </p>
             <button onClick={handleResetGame}>Reset</button>
-            <button onClick={handleTogglePlayPauseGame}>{isActive ? "Pause" : "Start"}</button>
-            <br/>
-            <p>Total score: {currentGame.totalScore}</p>
+            <div>
+                <div className="app">
+                    <div className="status-bar">
+                        <p>Time: {clock}</p>
+                        <p>Days left: {30 - currentGame.dayCount}</p>
+                        <p hidden={true}>Total score: {currentGame.totalScore}</p>
+                        <p hidden={true}>Water: {currentGame.waterScore}</p>
+                        <p hidden={true}>Fertilizer: {currentGame.fertilizerScore}</p>
+                    </div>
+                    <div className="display">
+                        <img className="pumpkin" alt={"pumpkin state"}
+                             src={pumpkin} hidden={pumpkin === undefined}>
+                        </img>
+                    </div>
 
-            <br/>
-            <button onClick={handleWater} disabled={!isActive}>Water</button>
-            <p>Water: {currentGame.waterScore}</p>
-            <button onClick={handleFertilizer} disabled={!isActive || currentGame.fertilizerScore}>Fertilize</button>
-            <p>Fertilizer: {currentGame.fertilizerScore}</p>
+                    <div className="icon-row">
+                        <button onClick={handleWater} disabled={!isActive}
+                                style={{backgroundImage: `url('src/img/water_can_1')`}}>Water
+                        </button>
+                        <button onClick={handleTogglePlayPauseGame}>{isActive ? "=" : ">"}</button>
+                        <button onClick={handleFertilizer} disabled={!isActive || currentGame.fertilizerScore}>Fertilize
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+
         </>
     )
 }
