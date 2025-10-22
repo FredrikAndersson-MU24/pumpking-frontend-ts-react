@@ -159,6 +159,53 @@ function App() {
         }
     }, [currentGame.timeOfDay]);
 
+    useEffect(() => {
+        const pumpkinProgress: string[] = ["src/img/pumpkin_1.png",
+            "src/img/pumpkin_2.png",
+            "src/img/pumpkin_3.png",
+            "src/img/pumpkin_4.png",
+            "src/img/pumpkin_5.png",
+            "src/img/pumpkin_6.png",
+            "src/img/pumpkin_7.png",
+            "src/img/pumpkin_8.png"];
+        switch (currentGame.dayCount) {
+            case 0:
+                setPumpkin(undefined);
+                break;
+            case 1:
+                setPumpkin(pumpkinProgress[0]);
+                break;
+            case 4:
+                setPumpkin(pumpkinProgress[1]);
+
+                break;
+            case 8:
+                setPumpkin(pumpkinProgress[2]);
+
+                break;
+            case 12:
+                setPumpkin(pumpkinProgress[3]);
+
+                break;
+            case 16:
+                setPumpkin(pumpkinProgress[4]);
+
+                break;
+            case 21:
+                setPumpkin(pumpkinProgress[5]);
+
+                break;
+            case 26:
+                setPumpkin(pumpkinProgress[6]);
+
+                break;
+            case 30:
+                setPumpkin(pumpkinProgress[7]);
+
+                break;
+        }
+    }, [currentGame.dayCount]);
+
     const handleWater = () => {
         setCurrentGame(prevState => ({
             ...prevState,
