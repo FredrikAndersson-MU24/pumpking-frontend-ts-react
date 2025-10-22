@@ -1,11 +1,14 @@
-import {useEffect, useState} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 import './App.css'
+import axios, {type AxiosResponse} from 'axios'
+import api from './api/api'
 
 interface Game {
+    id?: number,
     dayCount: number;
     timeOfDay: number;
     waterScore: Array<number>;
-    fertilizerScore: Array<number>;
+    fertilizerScore: boolean;
     weedsScore: number;
     totalScore: number;
     userName?: number;
@@ -16,7 +19,7 @@ function App() {
         dayCount: 0,
         timeOfDay: 0,
         waterScore: [],
-        fertilizerScore: [],
+        fertilizerScore: false,
         weedsScore: 0,
         totalScore: 0,
         userName: undefined
@@ -35,6 +38,7 @@ function App() {
         }
     });
     const {dayCount, timeOfDay, waterScore, fertilizerScore, weedsScore, totalScore} = currentGame;
+    const [waitingForAPI, setWaitingForAPI] = useState<boolean>(false);
 
     const handleResetGame = () => {
         setCurrentGame(defaultGame);
@@ -53,24 +57,67 @@ function App() {
         }
     }, [currentGame, isActive]);
 
+    const handleDayTick = useCallback(async () => {
+        try {
+            let response: AxiosResponse;
+            if (currentGame.id === undefined) {
+                response = await api.post('games/daytick',
+                    {
+                        "day": currentGame.dayCount,
+                        "timeOfDay": currentGame.timeOfDay,
+                        "waterScore": currentGame.waterScore,
+                        "fertilizerScore": currentGame.fertilizerScore,
+                        "weedsScore": 0
+                    })
+            } else {
+                response = await api.post('games/daytick',
+                    {
+                        "id": currentGame.id,
+                        "day": currentGame.dayCount,
+                        "timeOfDay": currentGame.timeOfDay,
+                        "waterScore": currentGame.waterScore,
+                        "fertilizerScore": currentGame.fertilizerScore,
+                        "weedsScore": 0
+                    })
+            }
+            const totalScore = response.data.totalScore;
+            if (totalScore !== undefined) {
+                setCurrentGame(prev => ({
+                    ...prev,
+                    id: response.data.id,
+                    timeOfDay: 0,
+                    dayCount: prev.dayCount + 1,
+                    waterScore: [],
+                    fertilizerScore: false,
+                    totalScore: totalScore
+                }));
+            }
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) || error.response) {
+                console.log("Error: " + error);
+            }
+        }
+    }, [currentGame]);
+
     useEffect(() => {
         let intervalId: number;
         console.log("log from timer")
         if (isActive) {
-            const timeKeeper = () => {
+            const timeKeeper = async () => {
                 if (currentGame.timeOfDay < 7) {
                     setCurrentGame(prev => ({
                         ...prev,
                         timeOfDay: prev.timeOfDay + 1
                     }));
-                } else {
-                    setCurrentGame(prev => ({
-                        ...prev,
-                        timeOfDay: 0,
-                        dayCount: prev.dayCount + 1,
-                        waterScore: [],
-                        fertilizerScore: []
-                    }));
+                } else if (!waitingForAPI) {
+                    setWaitingForAPI(true);
+                    try {
+                        await handleDayTick();
+                    } catch (error) {
+                        console.error("Failed to handle day tick:", error);
+                    } finally {
+                        setWaitingForAPI(false);
+                    }
                 }
             };
             if (currentGame.dayCount < 30) {
@@ -78,7 +125,7 @@ function App() {
             }
         }
         return () => clearInterval(intervalId);
-    }, [isActive, currentGame.timeOfDay, currentGame.dayCount]);
+    }, [isActive, currentGame.timeOfDay, currentGame.dayCount, handleDayTick, waitingForAPI]);
 
 
     useEffect(() => {
@@ -121,7 +168,7 @@ function App() {
     const handleFertilizer = () => {
         setCurrentGame(prevState => ({
             ...prevState,
-            fertilizerScore: [...prevState.fertilizerScore, prevState.timeOfDay]
+            fertilizerScore: true
         }));
         console.log(fertilizerScore)
     }
@@ -134,10 +181,13 @@ function App() {
             <button onClick={handleResetGame}>Reset</button>
             <button onClick={handleTogglePlayPauseGame}>{isActive ? "Pause" : "Start"}</button>
             <br/>
+            <p>Total score: {currentGame.totalScore}</p>
+
+            <br/>
             <button onClick={handleWater} disabled={!isActive}>Water</button>
             <p>Water: {currentGame.waterScore}</p>
-            <button onClick={handleFertilizer} disabled={!isActive}>Fertilize</button>
-            <p>Water: {currentGame.fertilizerScore}</p>
+            <button onClick={handleFertilizer} disabled={!isActive || currentGame.fertilizerScore}>Fertilize</button>
+            <p>Fertilizer: {currentGame.fertilizerScore}</p>
         </>
     )
 }
