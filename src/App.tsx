@@ -39,6 +39,8 @@ function App() {
     });
     const {dayCount, timeOfDay, waterScore, fertilizerScore, weedsScore, totalScore} = currentGame;
     const [waitingForAPI, setWaitingForAPI] = useState<boolean>(false);
+    const [pumpkin, setPumpkin] = useState<string | undefined>(undefined);
+
 
     const handleResetGame = () => {
         setCurrentGame(defaultGame);
