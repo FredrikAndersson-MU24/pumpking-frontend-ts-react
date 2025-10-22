@@ -181,10 +181,13 @@ function App() {
             <button onClick={handleResetGame}>Reset</button>
             <button onClick={handleTogglePlayPauseGame}>{isActive ? "Pause" : "Start"}</button>
             <br/>
+            <p>Total score: {currentGame.totalScore}</p>
+
+            <br/>
             <button onClick={handleWater} disabled={!isActive}>Water</button>
             <p>Water: {currentGame.waterScore}</p>
             <button onClick={handleFertilizer} disabled={!isActive || currentGame.fertilizerScore}>Fertilize</button>
-            <p>Water: {currentGame.fertilizerScore}</p>
+            <p>Fertilizer: {currentGame.fertilizerScore}</p>
         </>
     )
 }
