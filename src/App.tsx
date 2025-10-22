@@ -95,7 +95,7 @@ function App() {
                 }));
             }
         } catch (error: unknown) {
-            if (axios.isAxiosError(error) || error.response) {
+            if (axios.isAxiosError(error)) {
                 console.log("Error: " + error);
             }
         }
