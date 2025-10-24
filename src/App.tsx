@@ -168,41 +168,24 @@ function App() {
             "src/img/pumpkin_6.png",
             "src/img/pumpkin_7.png",
             "src/img/pumpkin_8.png"];
-        switch (currentGame.dayCount) {
-            case 0:
-                setPumpkin(undefined);
-                break;
-            case 1:
-                setPumpkin(pumpkinProgress[0]);
-                break;
-            case 4:
-                setPumpkin(pumpkinProgress[1]);
-
-                break;
-            case 8:
-                setPumpkin(pumpkinProgress[2]);
-
-                break;
-            case 12:
-                setPumpkin(pumpkinProgress[3]);
-
-                break;
-            case 16:
-                setPumpkin(pumpkinProgress[4]);
-
-                break;
-            case 21:
-                setPumpkin(pumpkinProgress[5]);
-
-                break;
-            case 26:
-                setPumpkin(pumpkinProgress[6]);
-
-                break;
-            case 30:
-                setPumpkin(pumpkinProgress[7]);
-
-                break;
+        if (currentGame.dayCount === 0) {
+            setPumpkin(undefined);
+        } else if (currentGame.dayCount === 1) {
+            setPumpkin(pumpkinProgress[0]);
+        } else if (currentGame.dayCount > 4 && currentGame.dayCount <= 8) {
+            setPumpkin(pumpkinProgress[0]);
+        } else if (currentGame.dayCount > 8 && currentGame.dayCount <= 12) {
+            setPumpkin(pumpkinProgress[0]);
+        } else if (currentGame.dayCount > 12 && currentGame.dayCount <= 16) {
+            setPumpkin(pumpkinProgress[0]);
+        } else if (currentGame.dayCount > 16 && currentGame.dayCount <= 20) {
+            setPumpkin(pumpkinProgress[0]);
+        } else if (currentGame.dayCount > 20 && currentGame.dayCount <= 25) {
+            setPumpkin(pumpkinProgress[0]);
+        } else if (currentGame.dayCount > 25 && currentGame.dayCount <= 29) {
+            setPumpkin(pumpkinProgress[0]);
+        } else if (currentGame.dayCount === 30) {
+            setPumpkin(pumpkinProgress[0]);
         }
     }, [currentGame.dayCount]);
 
