@@ -160,14 +160,14 @@ function App() {
     }, [currentGame.timeOfDay]);
 
     useEffect(() => {
-        const pumpkinProgress: string[] = ["src/img/pumpkin_1.png",
-            "src/img/pumpkin_2.png",
-            "src/img/pumpkin_3.png",
-            "src/img/pumpkin_4.png",
-            "src/img/pumpkin_5.png",
-            "src/img/pumpkin_6.png",
-            "src/img/pumpkin_7.png",
-            "src/img/pumpkin_8.png"];
+        const pumpkinProgress: string[] = ["src/img/pumpkin/pumpkin_1.png",
+            "src/img/pumpkin/pumpkin_2.png",
+            "src/img/pumpkin/pumpkin_3.png",
+            "src/img/pumpkin/pumpkin_4.png",
+            "src/img/pumpkin/pumpkin_5.png",
+            "src/img/pumpkin/pumpkin_6.png",
+            "src/img/pumpkin/pumpkin_7.png",
+            "src/img/pumpkin/pumpkin_8.png"];
         if (currentGame.dayCount === 0) {
             setPumpkin(undefined);
         } else if (currentGame.dayCount === 1) {
@@ -209,7 +209,7 @@ function App() {
         <>
             <img alt="toggle play/pause button"
                  onClick={handleResetGame}
-                 src={'src/img/reset.png'}
+                 src={'src/img/icons/reset.png'}
             />
             <div>
                 <div className="app">
@@ -228,16 +228,16 @@ function App() {
 
                     <div className="icon-row">
                         <img className="action-button" alt='water button'
-                             src={isActive ? 'src/img/water_can_1.png' : 'src/img/water_can_1_inactive.png'}
+                             src={isActive ? 'src/img/icons/water_can_1.png' : 'src/img/icons/water_can_1_inactive.png'}
 
                              onClick={isActive ? handleWater : undefined}/>
                         <img className="action-button" alt="toggle play/pause button"
                              onClick={handleTogglePlayPauseGame}
-                             src={isActive ? 'src/img/pause.png' : 'src/img/play.png'}
+                             src={isActive ? 'src/img/icons/pause.png' : 'src/img/icons/play.png'}
                         />
                         <img className="action-button"
                              alt='fertilize button'
-                             src={!fertilizerScore && isActive ? 'src/img/fertilizer_1.png' : 'src/img/fertilizer_1_inactive.png'}
+                             src={!fertilizerScore && isActive ? 'src/img/icons/fertilizer_1.png' : 'src/img/icons/fertilizer_1_inactive.png'}
                              onClick={isActive && !fertilizerScore ? handleFertilizer : undefined}/>
                     </div>
                 </div>
