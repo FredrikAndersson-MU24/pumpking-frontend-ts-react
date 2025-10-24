@@ -2,6 +2,10 @@ import {useCallback, useEffect, useState} from 'react'
 import './App.css'
 import axios, {type AxiosResponse} from 'axios'
 import api from './api/api'
+import {
+    Dialog,
+    DialogTitle, DialogContent, Button, DialogActions
+} from "@mui/material";
 
 interface Game {
     id?: number,
@@ -41,12 +45,16 @@ function App() {
     const [waitingForAPI, setWaitingForAPI] = useState<boolean>(false);
     const [pumpkin, setPumpkin] = useState<string | undefined>(undefined);
 
+    const [openDialog, setOpenDialog] = useState<boolean>(false);
 
-    const handleResetGame = () => {
-        setCurrentGame(defaultGame);
-        setActive(false);
-        console.log(dayCount, timeOfDay, waterScore, fertilizerScore, weedsScore, totalScore);
-    }
+    const handleOpenResetDialog = () => {
+        setOpenDialog(true);
+    };
+
+    const handleCloseResetDialog = () => {
+        setOpenDialog(false);
+    };
+
 
     const handleTogglePlayPauseGame = () => {
         setActive(prevActive => !prevActive);
@@ -58,6 +66,21 @@ function App() {
             localStorage.setItem('game', JSON.stringify(currentGame));
         }
     }, [currentGame, isActive]);
+
+
+    const handleDeleteGame = useCallback(async () => {
+        try {
+            if (currentGame.id === undefined) {
+                return;
+            } else {
+                await api.delete('games/delete/' + currentGame.id)
+            }
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                console.log("Error: " + error);
+            }
+        }
+    }, [currentGame]);
 
     const handleDayTick = useCallback(async () => {
         try {
@@ -100,6 +123,24 @@ function App() {
             }
         }
     }, [currentGame]);
+
+
+    const handleConfirmResetGame = async () => {
+        setOpenDialog(false);
+        if (!waitingForAPI) {
+            setWaitingForAPI(true);
+            try {
+                await handleDeleteGame();
+            } catch (error) {
+                console.error("Failed to handle day tick:", error);
+            } finally {
+                setWaitingForAPI(false);
+            }
+            setCurrentGame(defaultGame);
+            setActive(false);
+            console.log(dayCount, timeOfDay, waterScore, fertilizerScore, weedsScore, totalScore);
+        }
+    }
 
     useEffect(() => {
         let intervalId: number;
@@ -208,7 +249,7 @@ function App() {
     return (
         <>
             <img alt="toggle play/pause button"
-                 onClick={handleResetGame}
+                 onClick={handleOpenResetDialog}
                  src={'src/img/icons/reset.png'}
             />
             <div>
@@ -241,7 +282,30 @@ function App() {
                              onClick={isActive && !fertilizerScore ? handleFertilizer : undefined}/>
                     </div>
                 </div>
-
+                <Dialog open={openDialog} onClose={handleCloseResetDialog} sx={{
+                    padding: 0,
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                }}>
+                    <DialogTitle sx={{backgroundColor: "#ad3e02", color: "white"}}>Reset game </DialogTitle>
+                    <DialogContent sx={{backgroundColor: "#ad3e02", color: "white"}}>Are you sure you want to reset the
+                        game?
+                        <br/>Current progress will be lost.</DialogContent>
+                    <DialogActions sx={{
+                        backgroundColor: "#ad3e02", justifyContent: "center"
+                    }}>
+                        <Button onClick={() => handleConfirmResetGame()}
+                                sx={{
+                                    backgroundColor: "saddlebrown",
+                                    color: "lightgreen",
+                                    textAlign: "center"
+                                }}>YES</Button>
+                        <Button onClick={() => handleCloseResetDialog()}
+                                sx={{backgroundColor: "saddlebrown", color: "red", textAlign: "center"}} autoFocus>
+                            NO
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </div>
 
 
