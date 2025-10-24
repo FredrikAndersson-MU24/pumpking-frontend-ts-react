@@ -207,7 +207,10 @@ function App() {
 
     return (
         <>
-            <button onClick={handleResetGame}>Reset</button>
+            <img alt="toggle play/pause button"
+                 onClick={handleResetGame}
+                 src={'src/img/reset.png'}
+            />
             <div>
                 <div className="app">
                     <div className="status-bar">
@@ -224,12 +227,18 @@ function App() {
                     </div>
 
                     <div className="icon-row">
-                        <button onClick={handleWater} disabled={!isActive}
-                                style={{backgroundImage: `url('src/img/water_can_1')`}}>Water
-                        </button>
-                        <button onClick={handleTogglePlayPauseGame}>{isActive ? "=" : ">"}</button>
-                        <button onClick={handleFertilizer} disabled={!isActive || currentGame.fertilizerScore}>Fertilize
-                        </button>
+                        <img className="action-button" alt='water button'
+                             src={isActive ? 'src/img/water_can_1.png' : 'src/img/water_can_1_inactive.png'}
+
+                             onClick={isActive ? handleWater : undefined}/>
+                        <img className="action-button" alt="toggle play/pause button"
+                             onClick={handleTogglePlayPauseGame}
+                             src={isActive ? 'src/img/pause.png' : 'src/img/play.png'}
+                        />
+                        <img className="action-button"
+                             alt='fertilize button'
+                             src={!fertilizerScore && isActive ? 'src/img/fertilizer_1.png' : 'src/img/fertilizer_1_inactive.png'}
+                             onClick={isActive && !fertilizerScore ? handleFertilizer : undefined}/>
                     </div>
                 </div>
 
