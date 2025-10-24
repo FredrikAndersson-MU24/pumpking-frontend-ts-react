@@ -39,6 +39,8 @@ function App() {
     });
     const {dayCount, timeOfDay, waterScore, fertilizerScore, weedsScore, totalScore} = currentGame;
     const [waitingForAPI, setWaitingForAPI] = useState<boolean>(false);
+    const [pumpkin, setPumpkin] = useState<string | undefined>(undefined);
+
 
     const handleResetGame = () => {
         setCurrentGame(defaultGame);
@@ -93,7 +95,7 @@ function App() {
                 }));
             }
         } catch (error: unknown) {
-            if (axios.isAxiosError(error) || error.response) {
+            if (axios.isAxiosError(error)) {
                 console.log("Error: " + error);
             }
         }
@@ -121,7 +123,7 @@ function App() {
                 }
             };
             if (currentGame.dayCount < 30) {
-                intervalId = setInterval(timeKeeper, 1000); //Fine tune timeout
+                intervalId = setInterval(timeKeeper, 500); //Fine tune timeout
             }
         }
         return () => clearInterval(intervalId);
@@ -157,6 +159,36 @@ function App() {
         }
     }, [currentGame.timeOfDay]);
 
+    useEffect(() => {
+        const pumpkinProgress: string[] = ["src/img/pumpkin/pumpkin_1.png",
+            "src/img/pumpkin/pumpkin_2.png",
+            "src/img/pumpkin/pumpkin_3.png",
+            "src/img/pumpkin/pumpkin_4.png",
+            "src/img/pumpkin/pumpkin_5.png",
+            "src/img/pumpkin/pumpkin_6.png",
+            "src/img/pumpkin/pumpkin_7.png",
+            "src/img/pumpkin/pumpkin_8.png"];
+        if (currentGame.dayCount === 0) {
+            setPumpkin(undefined);
+        } else if (currentGame.dayCount === 1) {
+            setPumpkin(pumpkinProgress[0]);
+        } else if (currentGame.dayCount > 4 && currentGame.dayCount <= 8) {
+            setPumpkin(pumpkinProgress[0]);
+        } else if (currentGame.dayCount > 8 && currentGame.dayCount <= 12) {
+            setPumpkin(pumpkinProgress[0]);
+        } else if (currentGame.dayCount > 12 && currentGame.dayCount <= 16) {
+            setPumpkin(pumpkinProgress[0]);
+        } else if (currentGame.dayCount > 16 && currentGame.dayCount <= 20) {
+            setPumpkin(pumpkinProgress[0]);
+        } else if (currentGame.dayCount > 20 && currentGame.dayCount <= 25) {
+            setPumpkin(pumpkinProgress[0]);
+        } else if (currentGame.dayCount > 25 && currentGame.dayCount <= 29) {
+            setPumpkin(pumpkinProgress[0]);
+        } else if (currentGame.dayCount === 30) {
+            setPumpkin(pumpkinProgress[0]);
+        }
+    }, [currentGame.dayCount]);
+
     const handleWater = () => {
         setCurrentGame(prevState => ({
             ...prevState,
@@ -175,19 +207,44 @@ function App() {
 
     return (
         <>
-            <p>
-                Time: {clock} Days left: {30 - currentGame.dayCount}
-            </p>
-            <button onClick={handleResetGame}>Reset</button>
-            <button onClick={handleTogglePlayPauseGame}>{isActive ? "Pause" : "Start"}</button>
-            <br/>
-            <p>Total score: {currentGame.totalScore}</p>
+            <img alt="toggle play/pause button"
+                 onClick={handleResetGame}
+                 src={'src/img/icons/reset.png'}
+            />
+            <div>
+                <div className="app">
+                    <div className="status-bar">
+                        <p>Time: {clock}</p>
+                        <p>Days left: {30 - currentGame.dayCount}</p>
+                        <p hidden={true}>Total score: {currentGame.totalScore}</p>
+                        <p hidden={true}>Water: {currentGame.waterScore}</p>
+                        <p hidden={true}>Fertilizer: {currentGame.fertilizerScore}</p>
+                    </div>
+                    <div className="display">
+                        <img className="pumpkin" alt={"pumpkin state"}
+                             src={pumpkin} hidden={pumpkin === undefined}>
+                        </img>
+                    </div>
 
-            <br/>
-            <button onClick={handleWater} disabled={!isActive}>Water</button>
-            <p>Water: {currentGame.waterScore}</p>
-            <button onClick={handleFertilizer} disabled={!isActive || currentGame.fertilizerScore}>Fertilize</button>
-            <p>Fertilizer: {currentGame.fertilizerScore}</p>
+                    <div className="icon-row">
+                        <img className="action-button" alt='water button'
+                             src={isActive ? 'src/img/icons/water_can_1.png' : 'src/img/icons/water_can_1_inactive.png'}
+
+                             onClick={isActive ? handleWater : undefined}/>
+                        <img className="action-button" alt="toggle play/pause button"
+                             onClick={handleTogglePlayPauseGame}
+                             src={isActive ? 'src/img/icons/pause.png' : 'src/img/icons/play.png'}
+                        />
+                        <img className="action-button"
+                             alt='fertilize button'
+                             src={!fertilizerScore && isActive ? 'src/img/icons/fertilizer_1.png' : 'src/img/icons/fertilizer_1_inactive.png'}
+                             onClick={isActive && !fertilizerScore ? handleFertilizer : undefined}/>
+                    </div>
+                </div>
+
+            </div>
+
+
         </>
     )
 }
