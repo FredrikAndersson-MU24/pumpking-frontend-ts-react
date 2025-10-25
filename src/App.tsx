@@ -417,7 +417,7 @@ function App() {
                     <DialogContent sx={{backgroundColor: "#ad3e02", color: "white"}}>
                         Please enter your name:
                     </DialogContent>
-                    <TextField autoFocus={true} onChange={(e) =>
+                    <TextField autoFocus={true} required={true} onChange={(e) =>
                         setUsername(e.target.value)}></TextField>
                     <DialogActions sx={{
                         backgroundColor: "#ad3e02", justifyContent: "center"
