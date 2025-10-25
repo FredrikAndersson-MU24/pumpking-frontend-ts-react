@@ -14,8 +14,8 @@ interface Game {
     waterScore: Array<number>;
     fertilizerScore: boolean;
     weedsScore: number;
-    totalScore: number;
-    userName?: number;
+    totalScore?: number;
+    userName?: string;
 }
 
 function App() {
