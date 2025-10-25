@@ -100,13 +100,6 @@ function App() {
         console.log(isActive);
     };
 
-    useEffect(() => {
-        if (isActive) {
-            localStorage.setItem('game', JSON.stringify(currentGame));
-        }
-    }, [currentGame, isActive]);
-
-
     const handleDeleteGame = useCallback(async () => {
         try {
             if (currentGame.id === undefined) {
