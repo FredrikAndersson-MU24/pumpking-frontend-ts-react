@@ -183,6 +183,55 @@ function App() {
         }
     }
 
+    const handleWater = () => {
+        setCurrentGame(prevState => ({
+            ...prevState,
+            waterScore: [...prevState.waterScore, prevState.timeOfDay]
+        }));
+        console.log(waterScore)
+    }
+
+    const handleFertilizer = () => {
+        setCurrentGame(prevState => ({
+            ...prevState,
+            fertilizerScore: true
+        }));
+        console.log(fertilizerScore)
+    }
+
+    const handleSaveGameToAPI = async () => {
+        console.log(username);
+        try {
+            await api.post("/games/saveAtEndOfGame",
+                {
+                    "id": currentGame.id,
+                    "day": currentGame.dayCount,
+                    "timeOfDay": currentGame.timeOfDay,
+                    "waterScore": currentGame.waterScore,
+                    "fertilizerScore": currentGame.fertilizerScore,
+                    "weedsScore": 0,
+                    "userName": username
+                })
+            setOpenSaveDialog(false);
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                console.log("Error: " + error);
+            }
+        }
+    }
+
+    useEffect(() => {
+        if (isActive) {
+            localStorage.setItem('game', JSON.stringify(currentGame));
+        }
+    }, [currentGame, isActive]);
+
+    useEffect(() => {
+        if (currentGame.dayCount === 30) {
+            handleOpenEndDialog();
+        }
+    }, [currentGame.dayCount]);
+
     useEffect(() => {
         let intervalId: number;
         console.log("log from timer")
