@@ -44,13 +44,14 @@ function App() {
 
     const [openDialog, setOpenDialog] = useState<boolean>(false);
     const [username, setUsername] = useState<string>('');
+    const [openResetDialog, setOpenResetDialog] = useState<boolean>(false);
 
     const handleOpenResetDialog = () => {
-        setOpenDialog(true);
+        setOpenResetDialog(true);
     };
 
     const handleCloseResetDialog = () => {
-        setOpenDialog(false);
+        setOpenResetDialog(false);
     };
 
 
