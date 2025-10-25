@@ -27,7 +27,6 @@ function App() {
         weedsScore: 0
     };
 
-//    const [userName, setUserName] = useState<string>("");
     const [clock, setClock] = useState<string>("");
     const [isActive, setActive] = useState<boolean>(false);
     const [currentGame, setCurrentGame] = useState<Game>(() => {
@@ -44,6 +43,7 @@ function App() {
     const [pumpkin, setPumpkin] = useState<string | undefined>(undefined);
 
     const [openDialog, setOpenDialog] = useState<boolean>(false);
+    const [username, setUsername] = useState<string>('');
 
     const handleOpenResetDialog = () => {
         setOpenDialog(true);
