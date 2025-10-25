@@ -396,6 +396,62 @@ function App() {
                         </Button>
                     </DialogActions>
                 </Dialog>
+                <Dialog open={openEndDialog} onClose={handleCloseEndDialog} sx={{
+                    padding: 0,
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                }}>
+                    <DialogTitle sx={{backgroundColor: "#ad3e02", color: "white"}}>The day is finally
+                        here...</DialogTitle>
+                    <DialogContent sx={{backgroundColor: "#ad3e02", color: "white"}}>
+                        After all your hard work it's time for the annual harvest market pumpkin competition.
+                        <br/> You've managed to grow a pumpkin with a total weight
+                        of <b>{(currentGame.totalScore / 1000).toFixed(3)} kgs</b>.
+                        <br/>
+                        <br/>Would you like to add your score to the leaderboard?
+
+                    </DialogContent>
+                    <DialogActions sx={{
+                        backgroundColor: "#ad3e02", justifyContent: "center"
+                    }}>
+                        <Button onClick={() => handleOpenSaveDialog()}
+                                sx={{
+                                    backgroundColor: "saddlebrown",
+                                    color: "lightgreen",
+                                    textAlign: "center"
+                                }}>YES</Button>
+                        <Button onClick={() => handleCloseEndDialog()}
+                                sx={{backgroundColor: "saddlebrown", color: "red", textAlign: "center"}}>
+                            NO
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog open={openSaveDialog} sx={{
+                    padding: 0,
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                }}>
+                    <DialogTitle sx={{backgroundColor: "#ad3e02", color: "white"}}>Save game</DialogTitle>
+                    <DialogContent sx={{backgroundColor: "#ad3e02", color: "white"}}>
+                        Please enter your name:
+                    </DialogContent>
+                    <TextField autoFocus={true} onChange={(e) =>
+                        setUsername(e.target.value)}></TextField>
+                    <DialogActions sx={{
+                        backgroundColor: "#ad3e02", justifyContent: "center"
+                    }}>
+                        <Button onClick={() => handleSaveGameToAPI()}
+                                sx={{
+                                    backgroundColor: "saddlebrown",
+                                    color: "lightgreen",
+                                    textAlign: "center"
+                                }}>Save</Button>
+                        <Button onClick={() => handleCloseSaveDialog()}
+                                sx={{backgroundColor: "saddlebrown", color: "red", textAlign: "center"}}>
+                            Cancel
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </div>
 
 
