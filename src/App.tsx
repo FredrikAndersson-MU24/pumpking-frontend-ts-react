@@ -24,9 +24,7 @@ function App() {
         timeOfDay: 0,
         waterScore: [],
         fertilizerScore: false,
-        weedsScore: 0,
-        totalScore: 0,
-        userName: undefined
+        weedsScore: 0
     };
 
 //    const [userName, setUserName] = useState<string>("");
