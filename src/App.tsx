@@ -354,7 +354,7 @@ function App() {
                              onClick={isActive && !fertilizerScore ? handleFertilizer : undefined}/>
                     </div>
                 </div>
-                <Dialog open={openDialog} onClose={handleCloseResetDialog} sx={{
+                <Dialog open={openResetDialog} onClose={handleCloseResetDialog} sx={{
                     padding: 0,
                     marginLeft: "auto",
                     marginRight: "auto",
