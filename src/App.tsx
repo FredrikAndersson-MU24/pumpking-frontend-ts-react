@@ -4,7 +4,7 @@ import axios, {type AxiosResponse} from 'axios'
 import api from './api/api'
 import {
     Dialog,
-    DialogTitle, DialogContent, Button, DialogActions
+    DialogTitle, DialogContent, Button, DialogActions, TextField
 } from "@mui/material";
 
 interface Game {
@@ -14,8 +14,8 @@ interface Game {
     waterScore: Array<number>;
     fertilizerScore: boolean;
     weedsScore: number;
-    totalScore: number;
-    userName?: number;
+    totalScore?: number;
+    userName?: string;
 }
 
 function App() {
@@ -24,12 +24,9 @@ function App() {
         timeOfDay: 0,
         waterScore: [],
         fertilizerScore: false,
-        weedsScore: 0,
-        totalScore: 0,
-        userName: undefined
+        weedsScore: 0
     };
 
-//    const [userName, setUserName] = useState<string>("");
     const [clock, setClock] = useState<string>("");
     const [isActive, setActive] = useState<boolean>(false);
     const [currentGame, setCurrentGame] = useState<Game>(() => {
@@ -44,29 +41,64 @@ function App() {
     const {dayCount, timeOfDay, waterScore, fertilizerScore, weedsScore, totalScore} = currentGame;
     const [waitingForAPI, setWaitingForAPI] = useState<boolean>(false);
     const [pumpkin, setPumpkin] = useState<string | undefined>(undefined);
-
-    const [openDialog, setOpenDialog] = useState<boolean>(false);
+    const [username, setUsername] = useState<string>('');
+    const [openResetDialog, setOpenResetDialog] = useState<boolean>(false);
+    const [openEndDialog, setOpenEndDialog] = useState<boolean>(false);
+    const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
 
     const handleOpenResetDialog = () => {
-        setOpenDialog(true);
+        setOpenResetDialog(true);
     };
 
     const handleCloseResetDialog = () => {
-        setOpenDialog(false);
+        setOpenResetDialog(false);
     };
 
+    const handleOpenEndDialog = () => {
+        setOpenEndDialog(true);
+    };
+
+    const handleCloseEndDialog = async () => {
+        setOpenEndDialog(false);
+        if (!waitingForAPI) {
+            setWaitingForAPI(true);
+            try {
+                await handleDeleteGame();
+            } catch (error) {
+                console.error("Failed to delete game:", error);
+            } finally {
+                setWaitingForAPI(false);
+            }
+            setCurrentGame(defaultGame);
+            setActive(false);
+        }
+    };
+
+    const handleOpenSaveDialog = () => {
+        setOpenSaveDialog(true);
+        setOpenEndDialog(false);
+    };
+
+    const handleCloseSaveDialog = async () => {
+        setOpenSaveDialog(false);
+        if (!waitingForAPI) {
+            setWaitingForAPI(true);
+            try {
+                await handleDeleteGame();
+            } catch (error) {
+                console.error("Failed to delete game:", error);
+            } finally {
+                setWaitingForAPI(false);
+            }
+            setCurrentGame(defaultGame);
+            setActive(false);
+        }
+    };
 
     const handleTogglePlayPauseGame = () => {
         setActive(prevActive => !prevActive);
         console.log(isActive);
     };
-
-    useEffect(() => {
-        if (isActive) {
-            localStorage.setItem('game', JSON.stringify(currentGame));
-        }
-    }, [currentGame, isActive]);
-
 
     const handleDeleteGame = useCallback(async () => {
         try {
@@ -106,7 +138,7 @@ function App() {
                     })
             }
             const totalScore = response.data.totalScore;
-            if (totalScore !== undefined) {
+            if (response.data.day === 29) {
                 setCurrentGame(prev => ({
                     ...prev,
                     id: response.data.id,
@@ -116,6 +148,15 @@ function App() {
                     fertilizerScore: false,
                     totalScore: totalScore
                 }));
+            } else {
+                setCurrentGame(prev => ({
+                    ...prev,
+                    id: response.data.id,
+                    timeOfDay: 0,
+                    dayCount: prev.dayCount + 1,
+                    waterScore: [],
+                    fertilizerScore: false
+                }));
             }
         } catch (error: unknown) {
             if (axios.isAxiosError(error)) {
@@ -124,15 +165,14 @@ function App() {
         }
     }, [currentGame]);
 
-
     const handleConfirmResetGame = async () => {
-        setOpenDialog(false);
+        setOpenResetDialog(false);
         if (!waitingForAPI) {
             setWaitingForAPI(true);
             try {
                 await handleDeleteGame();
             } catch (error) {
-                console.error("Failed to handle day tick:", error);
+                console.error("Failed to handle delete game:", error);
             } finally {
                 setWaitingForAPI(false);
             }
@@ -141,6 +181,55 @@ function App() {
             console.log(dayCount, timeOfDay, waterScore, fertilizerScore, weedsScore, totalScore);
         }
     }
+
+    const handleWater = () => {
+        setCurrentGame(prevState => ({
+            ...prevState,
+            waterScore: [...prevState.waterScore, prevState.timeOfDay]
+        }));
+        console.log(waterScore)
+    }
+
+    const handleFertilizer = () => {
+        setCurrentGame(prevState => ({
+            ...prevState,
+            fertilizerScore: true
+        }));
+        console.log(fertilizerScore)
+    }
+
+    const handleSaveGameToAPI = async () => {
+        console.log(username);
+        try {
+            await api.post("/games/saveAtEndOfGame",
+                {
+                    "id": currentGame.id,
+                    "day": currentGame.dayCount,
+                    "timeOfDay": currentGame.timeOfDay,
+                    "waterScore": currentGame.waterScore,
+                    "fertilizerScore": currentGame.fertilizerScore,
+                    "weedsScore": 0,
+                    "userName": username
+                })
+            setOpenSaveDialog(false);
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                console.log("Error: " + error);
+            }
+        }
+    }
+
+    useEffect(() => {
+        if (isActive) {
+            localStorage.setItem('game', JSON.stringify(currentGame));
+        }
+    }, [currentGame, isActive]);
+
+    useEffect(() => {
+        if (currentGame.dayCount === 30) {
+            handleOpenEndDialog();
+        }
+    }, [currentGame.dayCount]);
 
     useEffect(() => {
         let intervalId: number;
@@ -169,7 +258,6 @@ function App() {
         }
         return () => clearInterval(intervalId);
     }, [isActive, currentGame.timeOfDay, currentGame.dayCount, handleDayTick, waitingForAPI]);
-
 
     useEffect(() => {
         switch (currentGame.timeOfDay) {
@@ -214,37 +302,21 @@ function App() {
         } else if (currentGame.dayCount === 1) {
             setPumpkin(pumpkinProgress[0]);
         } else if (currentGame.dayCount > 4 && currentGame.dayCount <= 8) {
-            setPumpkin(pumpkinProgress[0]);
+            setPumpkin(pumpkinProgress[1]);
         } else if (currentGame.dayCount > 8 && currentGame.dayCount <= 12) {
-            setPumpkin(pumpkinProgress[0]);
+            setPumpkin(pumpkinProgress[2]);
         } else if (currentGame.dayCount > 12 && currentGame.dayCount <= 16) {
-            setPumpkin(pumpkinProgress[0]);
+            setPumpkin(pumpkinProgress[3]);
         } else if (currentGame.dayCount > 16 && currentGame.dayCount <= 20) {
-            setPumpkin(pumpkinProgress[0]);
+            setPumpkin(pumpkinProgress[4]);
         } else if (currentGame.dayCount > 20 && currentGame.dayCount <= 25) {
-            setPumpkin(pumpkinProgress[0]);
+            setPumpkin(pumpkinProgress[5]);
         } else if (currentGame.dayCount > 25 && currentGame.dayCount <= 29) {
-            setPumpkin(pumpkinProgress[0]);
+            setPumpkin(pumpkinProgress[6]);
         } else if (currentGame.dayCount === 30) {
-            setPumpkin(pumpkinProgress[0]);
+            setPumpkin(pumpkinProgress[7]);
         }
     }, [currentGame.dayCount]);
-
-    const handleWater = () => {
-        setCurrentGame(prevState => ({
-            ...prevState,
-            waterScore: [...prevState.waterScore, prevState.timeOfDay]
-        }));
-        console.log(waterScore)
-    }
-
-    const handleFertilizer = () => {
-        setCurrentGame(prevState => ({
-            ...prevState,
-            fertilizerScore: true
-        }));
-        console.log(fertilizerScore)
-    }
 
     return (
         <>
@@ -282,7 +354,7 @@ function App() {
                              onClick={isActive && !fertilizerScore ? handleFertilizer : undefined}/>
                     </div>
                 </div>
-                <Dialog open={openDialog} onClose={handleCloseResetDialog} sx={{
+                <Dialog open={openResetDialog} onClose={handleCloseResetDialog} sx={{
                     padding: 0,
                     marginLeft: "auto",
                     marginRight: "auto",
@@ -301,14 +373,68 @@ function App() {
                                     textAlign: "center"
                                 }}>YES</Button>
                         <Button onClick={() => handleCloseResetDialog()}
-                                sx={{backgroundColor: "saddlebrown", color: "red", textAlign: "center"}} autoFocus>
+                                sx={{backgroundColor: "saddlebrown", color: "red", textAlign: "center"}}>
                             NO
                         </Button>
                     </DialogActions>
                 </Dialog>
+                <Dialog open={openEndDialog} onClose={handleCloseEndDialog} sx={{
+                    padding: 0,
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                }}>
+                    <DialogTitle sx={{backgroundColor: "#ad3e02", color: "white"}}>The day is finally
+                        here...</DialogTitle>
+                    <DialogContent sx={{backgroundColor: "#ad3e02", color: "white"}}>
+                        After all your hard work it's time for the annual harvest market pumpkin competition.
+                        <br/> You've managed to grow a pumpkin with a total weight
+                        of <b>{(currentGame.totalScore / 1000).toFixed(3)} kgs</b>.
+                        <br/>
+                        <br/>Would you like to add your score to the leaderboard?
+
+                    </DialogContent>
+                    <DialogActions sx={{
+                        backgroundColor: "#ad3e02", justifyContent: "center"
+                    }}>
+                        <Button onClick={() => handleOpenSaveDialog()}
+                                sx={{
+                                    backgroundColor: "saddlebrown",
+                                    color: "lightgreen",
+                                    textAlign: "center"
+                                }}>YES</Button>
+                        <Button onClick={() => handleCloseEndDialog()}
+                                sx={{backgroundColor: "saddlebrown", color: "red", textAlign: "center"}}>
+                            NO
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog open={openSaveDialog} sx={{
+                    padding: 0,
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                }}>
+                    <DialogTitle sx={{backgroundColor: "#ad3e02", color: "white"}}>Save game</DialogTitle>
+                    <DialogContent sx={{backgroundColor: "#ad3e02", color: "white"}}>
+                        Please enter your name:
+                    </DialogContent>
+                    <TextField autoFocus={true} required={true} onChange={(e) =>
+                        setUsername(e.target.value)}></TextField>
+                    <DialogActions sx={{
+                        backgroundColor: "#ad3e02", justifyContent: "center"
+                    }}>
+                        <Button onClick={() => handleSaveGameToAPI()}
+                                sx={{
+                                    backgroundColor: "saddlebrown",
+                                    color: "lightgreen",
+                                    textAlign: "center"
+                                }}>Save</Button>
+                        <Button onClick={() => handleCloseSaveDialog()}
+                                sx={{backgroundColor: "saddlebrown", color: "red", textAlign: "center"}}>
+                            Cancel
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </div>
-
-
         </>
     )
 }
