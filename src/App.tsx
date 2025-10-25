@@ -165,15 +165,14 @@ function App() {
         }
     }, [currentGame]);
 
-
     const handleConfirmResetGame = async () => {
-        setOpenDialog(false);
+        setOpenResetDialog(false);
         if (!waitingForAPI) {
             setWaitingForAPI(true);
             try {
                 await handleDeleteGame();
             } catch (error) {
-                console.error("Failed to handle day tick:", error);
+                console.error("Failed to handle delete game:", error);
             } finally {
                 setWaitingForAPI(false);
             }
@@ -319,22 +318,6 @@ function App() {
             setPumpkin(pumpkinProgress[0]);
         }
     }, [currentGame.dayCount]);
-
-    const handleWater = () => {
-        setCurrentGame(prevState => ({
-            ...prevState,
-            waterScore: [...prevState.waterScore, prevState.timeOfDay]
-        }));
-        console.log(waterScore)
-    }
-
-    const handleFertilizer = () => {
-        setCurrentGame(prevState => ({
-            ...prevState,
-            fertilizerScore: true
-        }));
-        console.log(fertilizerScore)
-    }
 
     return (
         <>
