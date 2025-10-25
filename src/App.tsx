@@ -4,7 +4,7 @@ import axios, {type AxiosResponse} from 'axios'
 import api from './api/api'
 import {
     Dialog,
-    DialogTitle, DialogContent, Button, DialogActions
+    DialogTitle, DialogContent, Button, DialogActions, TextField
 } from "@mui/material";
 
 interface Game {
