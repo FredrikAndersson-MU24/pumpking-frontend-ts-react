@@ -147,7 +147,7 @@ function App() {
                     })
             }
             const totalScore = response.data.totalScore;
-            if (totalScore !== undefined) {
+            if (response.data.day === 29) {
                 setCurrentGame(prev => ({
                     ...prev,
                     id: response.data.id,
@@ -156,6 +156,15 @@ function App() {
                     waterScore: [],
                     fertilizerScore: false,
                     totalScore: totalScore
+                }));
+            } else {
+                setCurrentGame(prev => ({
+                    ...prev,
+                    id: response.data.id,
+                    timeOfDay: 0,
+                    dayCount: prev.dayCount + 1,
+                    waterScore: [],
+                    fertilizerScore: false
                 }));
             }
         } catch (error: unknown) {
