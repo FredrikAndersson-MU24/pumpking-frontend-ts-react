@@ -41,8 +41,6 @@ function App() {
     const {dayCount, timeOfDay, waterScore, fertilizerScore, weedsScore, totalScore} = currentGame;
     const [waitingForAPI, setWaitingForAPI] = useState<boolean>(false);
     const [pumpkin, setPumpkin] = useState<string | undefined>(undefined);
-
-    const [openDialog, setOpenDialog] = useState<boolean>(false);
     const [username, setUsername] = useState<string>('');
     const [openResetDialog, setOpenResetDialog] = useState<boolean>(false);
     const [openEndDialog, setOpenEndDialog] = useState<boolean>(false);
