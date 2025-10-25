@@ -435,8 +435,6 @@ function App() {
                     </DialogActions>
                 </Dialog>
             </div>
-
-
         </>
     )
 }
