@@ -45,6 +45,8 @@ function App() {
     const [openDialog, setOpenDialog] = useState<boolean>(false);
     const [username, setUsername] = useState<string>('');
     const [openResetDialog, setOpenResetDialog] = useState<boolean>(false);
+    const [openEndDialog, setOpenEndDialog] = useState<boolean>(false);
+    const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
 
     const handleOpenResetDialog = () => {
         setOpenResetDialog(true);
@@ -54,6 +56,46 @@ function App() {
         setOpenResetDialog(false);
     };
 
+    const handleOpenEndDialog = () => {
+        setOpenEndDialog(true);
+    };
+
+    const handleCloseEndDialog = async () => {
+        setOpenEndDialog(false);
+        if (!waitingForAPI) {
+            setWaitingForAPI(true);
+            try {
+                await handleDeleteGame();
+            } catch (error) {
+                console.error("Failed to delete game:", error);
+            } finally {
+                setWaitingForAPI(false);
+            }
+            setCurrentGame(defaultGame);
+            setActive(false);
+        }
+    };
+
+    const handleOpenSaveDialog = () => {
+        setOpenSaveDialog(true);
+        setOpenEndDialog(false);
+    };
+
+    const handleCloseSaveDialog = async () => {
+        setOpenSaveDialog(false);
+        if (!waitingForAPI) {
+            setWaitingForAPI(true);
+            try {
+                await handleDeleteGame();
+            } catch (error) {
+                console.error("Failed to delete game:", error);
+            } finally {
+                setWaitingForAPI(false);
+            }
+            setCurrentGame(defaultGame);
+            setActive(false);
+        }
+    };
 
     const handleTogglePlayPauseGame = () => {
         setActive(prevActive => !prevActive);
