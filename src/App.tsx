@@ -373,7 +373,7 @@ function App() {
                                     textAlign: "center"
                                 }}>YES</Button>
                         <Button onClick={() => handleCloseResetDialog()}
-                                sx={{backgroundColor: "saddlebrown", color: "red", textAlign: "center"}} autoFocus>
+                                sx={{backgroundColor: "saddlebrown", color: "red", textAlign: "center"}}>
                             NO
                         </Button>
                     </DialogActions>
