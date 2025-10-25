@@ -302,19 +302,19 @@ function App() {
         } else if (currentGame.dayCount === 1) {
             setPumpkin(pumpkinProgress[0]);
         } else if (currentGame.dayCount > 4 && currentGame.dayCount <= 8) {
-            setPumpkin(pumpkinProgress[0]);
+            setPumpkin(pumpkinProgress[1]);
         } else if (currentGame.dayCount > 8 && currentGame.dayCount <= 12) {
-            setPumpkin(pumpkinProgress[0]);
+            setPumpkin(pumpkinProgress[2]);
         } else if (currentGame.dayCount > 12 && currentGame.dayCount <= 16) {
-            setPumpkin(pumpkinProgress[0]);
+            setPumpkin(pumpkinProgress[3]);
         } else if (currentGame.dayCount > 16 && currentGame.dayCount <= 20) {
-            setPumpkin(pumpkinProgress[0]);
+            setPumpkin(pumpkinProgress[4]);
         } else if (currentGame.dayCount > 20 && currentGame.dayCount <= 25) {
-            setPumpkin(pumpkinProgress[0]);
+            setPumpkin(pumpkinProgress[5]);
         } else if (currentGame.dayCount > 25 && currentGame.dayCount <= 29) {
-            setPumpkin(pumpkinProgress[0]);
+            setPumpkin(pumpkinProgress[6]);
         } else if (currentGame.dayCount === 30) {
-            setPumpkin(pumpkinProgress[0]);
+            setPumpkin(pumpkinProgress[7]);
         }
     }, [currentGame.dayCount]);
 
