@@ -338,6 +338,7 @@ function App() {
                              src={pumpkin} hidden={pumpkin === undefined}>
                         </img>
                     </div>
+            <StyledEngineProvider injectFirst>
 
                     <div className="icon-row">
                         <img className="action-button" alt='water button'
@@ -435,6 +436,7 @@ function App() {
                     </DialogActions>
                 </Dialog>
             </div>
+            </StyledEngineProvider>
         </>
     )
 }
