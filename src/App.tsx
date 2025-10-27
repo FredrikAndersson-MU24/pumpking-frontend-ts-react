@@ -121,10 +121,8 @@ function App() {
         console.log(leaderboard)
     };
 
-
     const handleTogglePlayPauseGame = () => {
         setActive(prevActive => !prevActive);
-        console.log(isActive);
     };
 
     const handleDeleteGame = () => {
