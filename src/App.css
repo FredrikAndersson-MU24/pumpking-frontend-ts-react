@@ -5,7 +5,7 @@
 
 body {
     background-color: #4b632a;
-    color: aliceblue;
+    color: lightgoldenrodyellow;
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -18,12 +18,21 @@ body {
 }
 
 .app {
-    max-width: 260px;
-    *height: 328px;
+    width: 90vw;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
+    overflow-x: hidden;
+}
+
+.top-icon-row {
+    display: flex;
+    width: 100%;
+
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .status-bar {
@@ -45,8 +54,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 256px;
-    width: 256px;
+    height: 0;
+    width: 100%;
+    padding-bottom: 100%;
+
     background-color: aliceblue;
     background-image: url("./img/background.png");
     background-size: cover;
@@ -76,7 +87,42 @@ body {
     width: 100%;
 }
 
+.dialog {
+    padding: 0.2rem;
+    margin-left: auto;
+    margin-right: auto;
+    /* border-radius: 1.6rem;*/
+}
+
+.dialog-element {
+    background-color: #ad3e02;
+    color: lightgoldenrodyellow;
+    font-family: "Cormorant Infant", fantasy;
+}
+
+.MuiTable-root {
+    background-color: #4b632a;
+}
+
+.MuiPaper-root {
+    border-radius: 0.6rem;
+}
+
 button {
     font-family: "Cormorant Infant", fantasy;
     font-size: 1.2em;
+}
+
+.table-row {
+    background-color: #c17400;
+}
+
+.highlighted-row {
+    background-color: darkorange;
+}
+
+.status, p, h2 {
+    padding: 0;
+    margin: 0;
+    text-align: center;
 }
