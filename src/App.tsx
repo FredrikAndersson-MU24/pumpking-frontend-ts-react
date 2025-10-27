@@ -76,6 +76,7 @@ function App() {
             } finally {
                 setWaitingForAPI(false);
             }
+            localStorage.removeItem('game');
             setCurrentGame(defaultGame);
             setActive(false);
         }
