@@ -76,6 +76,20 @@ body {
     width: 100%;
 }
 
+.dialog {
+    padding: 0.2rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.dialog-element {
+    background-color: #ad3e02;
+    color: white;
+    font-family: "Cormorant Infant", fantasy;
+
+}
+
+
 button {
     font-family: "Cormorant Infant", fantasy;
     font-size: 1.2em;
