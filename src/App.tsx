@@ -352,138 +352,143 @@ function App() {
     return (
         <>
             <StyledEngineProvider injectFirst>
-                <img alt="toggle play/pause button"
-                     onClick={handleOpenResetDialog}
-                     src={'src/img/icons/reset.png'}
-                />
-                <button onClick={handleOpenLeaderboardDialog}>leaderboard</button>
-                <div>
-                    <div className="app">
-                        <div className="status-bar">
-                            <p>Time: {clock}</p>
-                            <p>Days left: {30 - currentGame.dayCount}</p>
-                            <p hidden={true}>Total score: {currentGame.totalScore}</p>
-                            <p hidden={true}>Water: {currentGame.waterScore}</p>
-                            <p hidden={true}>Fertilizer: {currentGame.fertilizerScore}</p>
+                <div className="app">
+                    <header style={{textAlign: "center", fontSize: "2.4rem"}}>Pumpking</header>
+                    <div className={"top-icon-row"}>
+                        <img alt="reset button"
+                             onClick={handleOpenResetDialog}
+                             src={'src/img/icons/reset.png'}
+                        />
+                        <button onClick={handleOpenLeaderboardDialog}>High scores</button>
+                    </div>
+                    <div className="status-bar">
+                        <div className="status">
+                            <p>Time:</p>
+                            <h2>{clock}</h2>
                         </div>
-                        <div className="display">
-                            <img className="pumpkin" alt={"pumpkin state"}
-                                 src={pumpkin} hidden={pumpkin === undefined}>
-                            </img>
-                        </div>
-
-                        <div className="icon-row">
-                            <img className="action-button" alt='water button'
-                                 src={isActive ? 'src/img/icons/water_can_1.png' : 'src/img/icons/water_can_1_inactive.png'}
-                                 onClick={isActive ? handleWater : undefined}/>
-                            <img className="action-button" alt="toggle play/pause button"
-                                 onClick={handleTogglePlayPauseGame}
-                                 src={isActive ? 'src/img/icons/pause.png' : 'src/img/icons/play.png'}
-                            />
-                            <img className="action-button"
-                                 alt='fertilize button'
-                                 src={!fertilizerScore && isActive ? 'src/img/icons/fertilizer_1.png' : 'src/img/icons/fertilizer_1_inactive.png'}
-                                 onClick={isActive && !fertilizerScore ? handleFertilizer : undefined}/>
+                        <div className="status">
+                            <p>Days left</p>
+                            <h2>{30 - currentGame.dayCount}</h2>
                         </div>
                     </div>
-                    <Dialog open={openResetDialog} onClose={handleCloseResetDialog} sx={{
-                        padding: 0,
-                        marginLeft: "auto",
-                        marginRight: "auto",
+                    <div className="display">
+                        <img className="pumpkin" alt={"pumpkin state"}
+                             src={pumpkin} hidden={pumpkin === undefined}>
+                        </img>
+                    </div>
+                    <div className="icon-row">
+                        <img className="action-button" alt='water button'
+                             src={isActive ? 'src/img/icons/water_can_1.png' : 'src/img/icons/water_can_1_inactive.png'}
+                             onClick={isActive ? handleWater : undefined}/>
+                        <img className="action-button" alt="toggle play/pause button"
+                             onClick={handleTogglePlayPauseGame}
+                             src={isActive ? 'src/img/icons/pause.png' : 'src/img/icons/play.png'}
+                        />
+                        <img className="action-button"
+                             alt='fertilize button'
+                             src={!fertilizerScore && isActive ? 'src/img/icons/fertilizer_1.png' : 'src/img/icons/fertilizer_1_inactive.png'}
+                             onClick={isActive && !fertilizerScore ? handleFertilizer : undefined}/>
+                    </div>
+                </div>
+                <Dialog open={openResetDialog} sx={{
+                    padding: 0,
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                }}>
+                    <DialogTitle
+                        className={'dialog-element'}>Reset game </DialogTitle>
+                    <DialogContent
+                        className={'dialog-element'}>
+                        Are you sure you want to reset the
+                        game?
+                        <br/>Current progress will be lost.</DialogContent>
+                    <DialogActions className={'dialog-element'}
+                                   sx={{justifyContent: "center"}}>
+                        <Button onClick={() => handleConfirmResetGame()}
+                                sx={{
+                                    backgroundColor: "saddlebrown",
+                                    color: "lightgreen",
+                                    textAlign: "center"
+                                }}>YES</Button>
+                        <Button onClick={() => handleCloseResetDialog()}
+                                sx={{backgroundColor: "saddlebrown", color: "red", textAlign: "center"}}>
+                            NO
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog open={openEndDialog} sx={{
+                    padding: 0,
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                }}>
+                    <DialogTitle
+                        className={'dialog-element'}>The day is finally
+                        here...</DialogTitle>
+                    <DialogContent
+                        className={'dialog-element'}>
+                        After all your hard work it's time for the annual harvest market pumpkin competition.
+                        <br/> You've managed to grow a pumpkin with a total weight
+                        of <b>{(currentGame.totalScore / 1000).toFixed(3)} kgs</b>.
+                        <br/>
+                        <br/>Would you like to add your score to the leaderboard?
+                    </DialogContent>
+                    <DialogActions
+                        className={'dialog-element'}
+                        sx={{justifyContent: "center"}}>
+                        <Button onClick={() => handleOpenSaveDialog()}
+                                sx={{
+                                    backgroundColor: "saddlebrown",
+                                    color: "lightgreen",
+                                    textAlign: "center"
+                                }}>YES</Button>
+                        <Button onClick={() => handleCloseEndDialog()}
+                                sx={{backgroundColor: "saddlebrown", color: "red", textAlign: "center"}}>
+                            NO
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog open={openSaveDialog} sx={{
+                    padding: 0,
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                }}>
+                    <DialogTitle className={'dialog-element'}>Save game</DialogTitle>
+                    <DialogContent className={'dialog-element'}>
+                        Please enter your name:
+                    </DialogContent>
+                    <TextField required={true} onChange={(e) =>
+                        setUsername(e.target.value)}></TextField>
+                    <DialogActions sx={{
+                        backgroundColor: "#ad3e02", justifyContent: "center"
                     }}>
-                        <DialogTitle
-                            className={'dialog-element'}>Reset game </DialogTitle>
-                        <DialogContent
-                            className={'dialog-element'}>
-                            Are you sure you want to reset the
-                            game?
-                            <br/>Current progress will be lost.</DialogContent>
-                        <DialogActions className={'dialog-element'}
-                                       sx={{justifyContent: "center"}}>
-                            <Button onClick={() => handleConfirmResetGame()}
-                                    sx={{
-                                        backgroundColor: "saddlebrown",
-                                        color: "lightgreen",
-                                        textAlign: "center"
-                                    }}>YES</Button>
-                            <Button onClick={() => handleCloseResetDialog()}
-                                    sx={{backgroundColor: "saddlebrown", color: "red", textAlign: "center"}}>
-                                NO
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
-                    <Dialog open={openEndDialog} onClose={handleCloseEndDialog} sx={{
-                        padding: 0,
-                        marginLeft: "auto",
-                        marginRight: "auto",
-                    }}>
-                        <DialogTitle
-                            className={'dialog-element'}>The day is finally
-                            here...</DialogTitle>
-                        <DialogContent
-                            className={'dialog-element'}>
-                            After all your hard work it's time for the annual harvest market pumpkin competition.
-                            <br/> You've managed to grow a pumpkin with a total weight
-                            of <b>{(currentGame.totalScore / 1000).toFixed(3)} kgs</b>.
-                            <br/>
-                            <br/>Would you like to add your score to the leaderboard?
+                        <Button onClick={() => handleSaveGameToAPI()}
+                                sx={{
+                                    backgroundColor: "saddlebrown",
+                                    color: "lightgreen",
+                                    textAlign: "center"
+                                }}>Save</Button>
+                        <Button onClick={() => handleCloseSaveDialog()}
+                                sx={{backgroundColor: "saddlebrown", color: "red", textAlign: "center"}}>
+                            Cancel
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog className={'dialog'} open={openLeaderboardDialog}>
+                    <DialogTitle className={'dialog-element'}>Leaderboard</DialogTitle>
+                    {leaderboard === undefined ?
+                        <Typography> No entries</Typography> :
+                        <TableContainer sx={{maxHeight: 200, overflow: "auto"}}>
+                            <Table stickyHeader size="small">
+                                <TableHead>
+                                    <TableRow className={'dialog-element'}>
+                                        <TableCell className={'dialog-element'}>#</TableCell>
 
-                        </DialogContent>
-                        <DialogActions
-                            className={'dialog-element'}
-                            sx={{justifyContent: "center"}}>
-                            <Button onClick={() => handleOpenSaveDialog()}
-                                    sx={{
-                                        backgroundColor: "saddlebrown",
-                                        color: "lightgreen",
-                                        textAlign: "center"
-                                    }}>YES</Button>
-                            <Button onClick={() => handleCloseEndDialog()}
-                                    sx={{backgroundColor: "saddlebrown", color: "red", textAlign: "center"}}>
-                                NO
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
-                    <Dialog open={openSaveDialog} sx={{
-                        padding: 0,
-                        marginLeft: "auto",
-                        marginRight: "auto",
-                    }}>
-                        <DialogTitle className={'dialog-element'}>Save game</DialogTitle>
-                        <DialogContent className={'dialog-element'}>
-                            Please enter your name:
-                        </DialogContent>
-                        <TextField autoFocus={true} required={true} onChange={(e) =>
-                            setUsername(e.target.value)}></TextField>
-                        <DialogActions sx={{
-                            backgroundColor: "#ad3e02", justifyContent: "center"
-                        }}>
-                            <Button onClick={() => handleSaveGameToAPI()}
-                                    sx={{
-                                        backgroundColor: "saddlebrown",
-                                        color: "lightgreen",
-                                        textAlign: "center"
-                                    }}>Save</Button>
-                            <Button onClick={() => handleCloseSaveDialog()}
-                                    sx={{backgroundColor: "saddlebrown", color: "red", textAlign: "center"}}>
-                                Cancel
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
-                    <Dialog className={'dialog'} open={openLeaderboardDialog}>
-                        <DialogTitle className={'dialog-element'}>Leaderboard</DialogTitle>
-                        {leaderboard === undefined ?
-                            <Typography> No entries</Typography> :
-                            <TableContainer>
-                                <Table size="small">
-                                    <TableHead>
-                                        <TableRow className={'dialog-element'}>
-                                            <TableCell className={'dialog-element'}
-                                                       sortDirection={"desc"}>Score</TableCell>
-                                            <TableCell className={'dialog-element'} align="right">Name</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
+                                        <TableCell className={'dialog-element'}
+                                                   sortDirection={"desc"}>Score</TableCell>
+                                        <TableCell className={'dialog-element'} align="right">Name</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
 
                                         {leaderboard.sort((a: Game, b: Game) => b.totalScore - a.totalScore).map((item: Game) => (
                                             <TableRow
