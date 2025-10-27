@@ -127,19 +127,26 @@ function App() {
         console.log(isActive);
     };
 
-    const handleDeleteGame = useCallback(async () => {
-        try {
-            if (currentGame.id === undefined) {
-                return;
-            } else {
-                await api.delete('games/delete/' + currentGame.id)
-            }
-        } catch (error: unknown) {
-            if (axios.isAxiosError(error)) {
-                console.log("Error: " + error);
-            }
+    const handleDeleteGame = () => {
+        if (currentGame.id === undefined) {
+            return;
+        } else {
+            api.delete('games/delete/' + currentGame.id)
+                .then(function () {
+                        localStorage.removeItem('game');
+                        setCurrentGame(defaultGame);
+                        setActive(false);
+                    }
+                )
+                .catch(error => {
+                        if (axios.isAxiosError(error)) {
+                            console.log("Error: " + error);
+                        }
+                    }
+                )
+
         }
-    }, [currentGame]);
+    };
 
     const handleDayTick = useCallback(async () => {
         api.post('games/daytick', (currentGame.id === undefined ?
