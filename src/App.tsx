@@ -373,58 +373,61 @@ function App() {
                             </img>
                         </div>
 
-                    <div className="icon-row">
-                        <img className="action-button" alt='water button'
-                             src={isActive ? 'src/img/icons/water_can_1.png' : 'src/img/icons/water_can_1_inactive.png'}
-
-                             onClick={isActive ? handleWater : undefined}/>
-                        <img className="action-button" alt="toggle play/pause button"
-                             onClick={handleTogglePlayPauseGame}
-                             src={isActive ? 'src/img/icons/pause.png' : 'src/img/icons/play.png'}
-                        />
-                        <img className="action-button"
-                             alt='fertilize button'
-                             src={!fertilizerScore && isActive ? 'src/img/icons/fertilizer_1.png' : 'src/img/icons/fertilizer_1_inactive.png'}
-                             onClick={isActive && !fertilizerScore ? handleFertilizer : undefined}/>
+                        <div className="icon-row">
+                            <img className="action-button" alt='water button'
+                                 src={isActive ? 'src/img/icons/water_can_1.png' : 'src/img/icons/water_can_1_inactive.png'}
+                                 onClick={isActive ? handleWater : undefined}/>
+                            <img className="action-button" alt="toggle play/pause button"
+                                 onClick={handleTogglePlayPauseGame}
+                                 src={isActive ? 'src/img/icons/pause.png' : 'src/img/icons/play.png'}
+                            />
+                            <img className="action-button"
+                                 alt='fertilize button'
+                                 src={!fertilizerScore && isActive ? 'src/img/icons/fertilizer_1.png' : 'src/img/icons/fertilizer_1_inactive.png'}
+                                 onClick={isActive && !fertilizerScore ? handleFertilizer : undefined}/>
+                        </div>
                     </div>
-                </div>
-                <Dialog open={openResetDialog} onClose={handleCloseResetDialog} sx={{
-                    padding: 0,
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                }}>
-                    <DialogTitle sx={{backgroundColor: "#ad3e02", color: "white"}}>Reset game </DialogTitle>
-                    <DialogContent sx={{backgroundColor: "#ad3e02", color: "white"}}>Are you sure you want to reset the
-                        game?
-                        <br/>Current progress will be lost.</DialogContent>
-                    <DialogActions sx={{
-                        backgroundColor: "#ad3e02", justifyContent: "center"
+                    <Dialog open={openResetDialog} onClose={handleCloseResetDialog} sx={{
+                        padding: 0,
+                        marginLeft: "auto",
+                        marginRight: "auto",
                     }}>
-                        <Button onClick={() => handleConfirmResetGame()}
-                                sx={{
-                                    backgroundColor: "saddlebrown",
-                                    color: "lightgreen",
-                                    textAlign: "center"
-                                }}>YES</Button>
-                        <Button onClick={() => handleCloseResetDialog()}
-                                sx={{backgroundColor: "saddlebrown", color: "red", textAlign: "center"}}>
-                            NO
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-                <Dialog open={openEndDialog} onClose={handleCloseEndDialog} sx={{
-                    padding: 0,
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                }}>
-                    <DialogTitle sx={{backgroundColor: "#ad3e02", color: "white"}}>The day is finally
-                        here...</DialogTitle>
-                    <DialogContent sx={{backgroundColor: "#ad3e02", color: "white"}}>
-                        After all your hard work it's time for the annual harvest market pumpkin competition.
-                        <br/> You've managed to grow a pumpkin with a total weight
-                        of <b>{(currentGame.totalScore / 1000).toFixed(3)} kgs</b>.
-                        <br/>
-                        <br/>Would you like to add your score to the leaderboard?
+                        <DialogTitle
+                            className={'dialog-element'}>Reset game </DialogTitle>
+                        <DialogContent
+                            className={'dialog-element'}>
+                            Are you sure you want to reset the
+                            game?
+                            <br/>Current progress will be lost.</DialogContent>
+                        <DialogActions className={'dialog-element'}
+                                       sx={{justifyContent: "center"}}>
+                            <Button onClick={() => handleConfirmResetGame()}
+                                    sx={{
+                                        backgroundColor: "saddlebrown",
+                                        color: "lightgreen",
+                                        textAlign: "center"
+                                    }}>YES</Button>
+                            <Button onClick={() => handleCloseResetDialog()}
+                                    sx={{backgroundColor: "saddlebrown", color: "red", textAlign: "center"}}>
+                                NO
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                    <Dialog open={openEndDialog} onClose={handleCloseEndDialog} sx={{
+                        padding: 0,
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                    }}>
+                        <DialogTitle
+                            className={'dialog-element'}>The day is finally
+                            here...</DialogTitle>
+                        <DialogContent
+                            className={'dialog-element'}>
+                            After all your hard work it's time for the annual harvest market pumpkin competition.
+                            <br/> You've managed to grow a pumpkin with a total weight
+                            of <b>{(currentGame.totalScore / 1000).toFixed(3)} kgs</b>.
+                            <br/>
+                            <br/>Would you like to add your score to the leaderboard?
 
                         </DialogContent>
                         <DialogActions
