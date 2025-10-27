@@ -113,7 +113,7 @@ function App() {
             try {
                 handleGetLeaderboardFromAPI();
             } catch (error) {
-                console.error("Failed to delete game:", error);
+                console.error("Failed to load games:", error);
             } finally {
                 setWaitingForAPI(false);
             }
