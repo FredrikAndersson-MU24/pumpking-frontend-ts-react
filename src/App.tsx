@@ -50,6 +50,7 @@ function App() {
     const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
     const [openLeaderboardDialog, setOpenLeaderboardDialog] = useState<boolean>(false);
     const [leaderboard, setLeaderboard] = useState<Array<Game>>();
+    const [lastGameID, setLastGameID] = useState<number>();
 
 
     const handleOpenResetDialog = () => {
@@ -237,6 +238,7 @@ function App() {
                     "weedsScore": 0,
                     "userName": username
                 })
+        setLastGameID(currentGame.id);
             setOpenSaveDialog(false);
         } catch (error: unknown) {
             if (axios.isAxiosError(error)) {
