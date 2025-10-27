@@ -103,6 +103,7 @@ function App() {
 
     const handleCloseLeaderboardDialog = () => {
         setOpenLeaderboardDialog(false);
+        setLastGameID(undefined);
     };
 
     const handleOpenLeaderboardDialog = () => {
