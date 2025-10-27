@@ -142,54 +142,44 @@ function App() {
     }, [currentGame]);
 
     const handleDayTick = useCallback(async () => {
-        try {
-            let response: AxiosResponse;
-            if (currentGame.id === undefined) {
-                response = await api.post('games/daytick',
-                    {
-                        "day": currentGame.dayCount,
-                        "timeOfDay": currentGame.timeOfDay,
-                        "waterScore": currentGame.waterScore,
-                        "fertilizerScore": currentGame.fertilizerScore,
-                        "weedsScore": 0
-                    })
-            } else {
-                response = await api.post('games/daytick',
-                    {
-                        "id": currentGame.id,
-                        "day": currentGame.dayCount,
-                        "timeOfDay": currentGame.timeOfDay,
-                        "waterScore": currentGame.waterScore,
-                        "fertilizerScore": currentGame.fertilizerScore,
-                        "weedsScore": 0
-                    })
-            }
-            const totalScore = response.data.totalScore;
-            if (response.data.day === 29) {
-                setCurrentGame(prev => ({
+        api.post('games/daytick', (currentGame.id === undefined ?
+            {
+                "day": currentGame.dayCount,
+                "timeOfDay": currentGame.timeOfDay,
+                "waterScore": currentGame.waterScore,
+                "fertilizerScore": currentGame.fertilizerScore,
+                "weedsScore": 0
+            } : {
+                "id": currentGame.id,
+                "day": currentGame.dayCount,
+                "timeOfDay": currentGame.timeOfDay,
+                "waterScore": currentGame.waterScore,
+                "fertilizerScore": currentGame.fertilizerScore,
+                "weedsScore": 0
+            }))
+            .then(response => {
+                setCurrentGame(prev => (response.data.day === 29 ? {
                     ...prev,
                     id: response.data.id,
                     timeOfDay: 0,
                     dayCount: prev.dayCount + 1,
                     waterScore: [],
                     fertilizerScore: false,
-                    totalScore: totalScore
-                }));
-            } else {
-                setCurrentGame(prev => ({
+                    totalScore: response.data.totalScore
+                } : {
                     ...prev,
                     id: response.data.id,
                     timeOfDay: 0,
                     dayCount: prev.dayCount + 1,
                     waterScore: [],
                     fertilizerScore: false
-                }));
-            }
-        } catch (error: unknown) {
-            if (axios.isAxiosError(error)) {
-                console.log("Error: " + error);
-            }
-        }
+                }))
+            })
+            .catch(error => {
+                if (axios.isAxiosError(error)) {
+                    console.log("Error: " + error);
+                }
+            })
     }, [currentGame]);
 
     const handleConfirmResetGame = async () => {
@@ -225,20 +215,19 @@ function App() {
         console.log(fertilizerScore)
     }
 
-    const handleSaveGameToAPI = async () => {
-        console.log(username);
-        try {
-            await api.post("/games/saveAtEndOfGame",
-                {
-                    "id": currentGame.id,
-                    "day": currentGame.dayCount,
-                    "timeOfDay": currentGame.timeOfDay,
-                    "waterScore": currentGame.waterScore,
-                    "fertilizerScore": currentGame.fertilizerScore,
-                    "weedsScore": 0,
-                    "userName": username
-                })
+    const handleSaveGameToAPI = () => {
         setLastGameID(currentGame.id);
+        api.post("/games/saveAtEndOfGame",
+            {
+                "id": currentGame.id,
+                "day": currentGame.dayCount,
+                "timeOfDay": currentGame.timeOfDay,
+                "waterScore": currentGame.waterScore,
+                "fertilizerScore": currentGame.fertilizerScore,
+                "weedsScore": 0,
+                "userName": username
+            }).then(response => {
+            setLeaderboard(response.data);
             setOpenSaveDialog(false);
         } catch (error: unknown) {
             if (axios.isAxiosError(error)) {
