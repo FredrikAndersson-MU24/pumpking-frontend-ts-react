@@ -264,9 +264,8 @@ function App() {
 
     useEffect(() => {
         let intervalId: number;
-        console.log("log from timer")
         if (isActive) {
-            const timeKeeper = async () => {
+            const timeKeeper = () => {
                 if (currentGame.timeOfDay < 7) {
                     setCurrentGame(prev => ({
                         ...prev,
@@ -275,7 +274,7 @@ function App() {
                 } else if (!waitingForAPI) {
                     setWaitingForAPI(true);
                     try {
-                        await handleDayTick();
+                        handleDayTick().then();
                     } catch (error) {
                         console.error("Failed to handle day tick:", error);
                     } finally {
@@ -288,7 +287,7 @@ function App() {
             }
         }
         return () => clearInterval(intervalId);
-    }, [isActive, currentGame.timeOfDay, currentGame.dayCount, handleDayTick, waitingForAPI]);
+    }, [isActive, currentGame.timeOfDay, currentGame.dayCount, waitingForAPI, handleDayTick]);
 
     useEffect(() => {
         switch (currentGame.timeOfDay) {
