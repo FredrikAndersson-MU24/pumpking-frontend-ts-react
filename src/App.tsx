@@ -1,6 +1,6 @@
-import {useCallback, useEffect, useState} from 'react'
+import {useEffect, useState, useCallback} from 'react'
 import './App.css'
-import axios, {type AxiosResponse} from 'axios'
+import axios from 'axios'
 import api from './api/api'
 import {
     Dialog,
