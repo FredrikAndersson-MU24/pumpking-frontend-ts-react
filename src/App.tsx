@@ -16,12 +16,13 @@ interface Game {
     waterScore: Array<number>;
     fertilizerScore: boolean;
     weedsScore: number;
-    totalScore?: number;
+    totalScore: number;
     userName?: string;
 }
 
 function App() {
     const defaultGame: Game = {
+        totalScore: 0,
         dayCount: 0,
         timeOfDay: 0,
         waterScore: [],
