@@ -489,9 +489,11 @@ function App() {
                                 </TableHead>
                                 <TableBody>
 
-                                        {leaderboard.sort((a: Game, b: Game) => b.totalScore - a.totalScore).map((item: Game) => (
-                                            <TableRow
-                                                key={item.id}>
+                                    {leaderboard.sort((a: Game, b: Game) => b.totalScore - a.totalScore).map((item: Game) =>
+                                        (
+                                            <TableRow key={item.id}
+                                                      className={item.id === lastGameID ? "highlighted-row" : "table-row"}>
+                                                <TableCell>{leaderboard.indexOf(item) + 1}</TableCell>
                                                 <TableCell align="right">{item.totalScore}</TableCell>
                                                 <TableCell component="th" scope="row">
                                                     "{item.userName}"
