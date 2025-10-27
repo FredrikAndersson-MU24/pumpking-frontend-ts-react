@@ -496,7 +496,7 @@ function App() {
                                                 <TableCell>{leaderboard.indexOf(item) + 1}</TableCell>
                                                 <TableCell align="right">{item.totalScore}</TableCell>
                                                 <TableCell component="th" scope="row">
-                                                    "{item.userName}"
+                                                    {item.userName}
                                                 </TableCell>
                                             </TableRow>
                                         ))}
