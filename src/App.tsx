@@ -98,8 +98,6 @@ function App() {
             } finally {
                 setWaitingForAPI(false);
             }
-            setCurrentGame(defaultGame);
-            setActive(false);
         }
     };
 
