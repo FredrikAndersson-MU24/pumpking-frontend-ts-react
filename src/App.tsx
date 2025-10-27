@@ -65,12 +65,12 @@ function App() {
         setOpenEndDialog(true);
     };
 
-    const handleCloseEndDialog = async () => {
+    const handleCloseEndDialog = () => {
         setOpenEndDialog(false);
         if (!waitingForAPI) {
             setWaitingForAPI(true);
             try {
-                await handleDeleteGame();
+                handleDeleteGame();
             } catch (error) {
                 console.error("Failed to delete game:", error);
             } finally {
@@ -86,12 +86,12 @@ function App() {
         setOpenEndDialog(false);
     };
 
-    const handleCloseSaveDialog = async () => {
+    const handleCloseSaveDialog = () => {
         setOpenSaveDialog(false);
         if (!waitingForAPI) {
             setWaitingForAPI(true);
             try {
-                await handleDeleteGame();
+                handleDeleteGame();
             } catch (error) {
                 console.error("Failed to delete game:", error);
             } finally {
@@ -106,12 +106,12 @@ function App() {
         setOpenLeaderboardDialog(false);
     };
 
-    const handleOpenLeaderboardDialog = async () => {
+    const handleOpenLeaderboardDialog = () => {
         setOpenLeaderboardDialog(true);
         if (!waitingForAPI) {
             setWaitingForAPI(true);
             try {
-                await handleGetLeaderboardFromAPI();
+                handleGetLeaderboardFromAPI();
             } catch (error) {
                 console.error("Failed to delete game:", error);
             } finally {
@@ -189,12 +189,12 @@ function App() {
             })
     }, [currentGame]);
 
-    const handleConfirmResetGame = async () => {
+    const handleConfirmResetGame = () => {
         setOpenResetDialog(false);
         if (!waitingForAPI) {
             setWaitingForAPI(true);
             try {
-                await handleDeleteGame();
+                handleDeleteGame();
             } catch (error) {
                 console.error("Failed to handle delete game:", error);
             } finally {
@@ -243,7 +243,7 @@ function App() {
         }
     }
 
-    const handleGetLeaderboardFromAPI = async () => {
+    const handleGetLeaderboardFromAPI = () => {
         api.get('/games/finished').then(response => {
             setLeaderboard(response.data);
             console.log(response.data);
