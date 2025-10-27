@@ -4,7 +4,8 @@ import axios, {type AxiosResponse} from 'axios'
 import api from './api/api'
 import {
     Dialog,
-    DialogTitle, DialogContent, Button, DialogActions, TextField
+    DialogTitle, DialogContent, Button, DialogActions, TextField, TableContainer, Table,
+    TableHead, TableRow, TableCell, TableBody, Typography
 } from "@mui/material";
 import {StyledEngineProvider} from "@mui/material/styles";
 
