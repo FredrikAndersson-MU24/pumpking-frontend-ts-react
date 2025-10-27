@@ -241,13 +241,12 @@ function App() {
             if (axios.isAxiosError(error)) {
                 console.log("Error: " + error);
             }
-        }
+        });
     }
 
     const handleGetLeaderboardFromAPI = () => {
         api.get('/games/finished').then(response => {
             setLeaderboard(response.data);
-            console.log(response.data);
         }).catch(error => console.log(error));
     }
 
