@@ -473,8 +473,7 @@ function App() {
                     </Dialog>
                     <Dialog className={'dialog'} open={openLeaderboardDialog}>
                         <DialogTitle className={'dialog-element'}>Leaderboard</DialogTitle>
-                        {leaderboard == undefined ?
-
+                        {leaderboard === undefined ?
                             <Typography> No entries</Typography> :
                             <TableContainer>
                                 <Table size="small">
