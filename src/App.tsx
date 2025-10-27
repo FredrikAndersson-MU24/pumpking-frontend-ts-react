@@ -500,18 +500,17 @@ function App() {
                                                 </TableCell>
                                             </TableRow>
                                         ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        }
-                        <DialogActions sx={{justifyContent: "center"}} className={'dialog-element'}>
-                            <Button onClick={() => handleCloseLeaderboardDialog()}
-                                    sx={{backgroundColor: "saddlebrown", color: "black", textAlign: "center"}}>
-                                Close
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
-                </div>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    }
+                    <DialogActions sx={{justifyContent: "center"}} className={'dialog-element'}>
+                        <Button onClick={() => handleCloseLeaderboardDialog()}
+                                sx={{backgroundColor: "saddlebrown", color: "black", textAlign: "center"}}>
+                            Close
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </StyledEngineProvider>
         </>
     )
