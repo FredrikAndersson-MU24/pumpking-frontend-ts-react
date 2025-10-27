@@ -234,7 +234,10 @@ function App() {
             }).then(response => {
             setLeaderboard(response.data);
             setOpenSaveDialog(false);
-        } catch (error: unknown) {
+            setOpenLeaderboardDialog(true);
+            setCurrentGame(defaultGame);
+            setActive(false);
+        }).catch(error => {
             if (axios.isAxiosError(error)) {
                 console.log("Error: " + error);
             }
