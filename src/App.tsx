@@ -46,6 +46,9 @@ function App() {
     const [openResetDialog, setOpenResetDialog] = useState<boolean>(false);
     const [openEndDialog, setOpenEndDialog] = useState<boolean>(false);
     const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
+    const [openLeaderboardDialog, setOpenLeaderboardDialog] = useState<boolean>(false);
+    const [leaderboard, setLeaderboard] = useState<Array<Game>>();
+
 
     const handleOpenResetDialog = () => {
         setOpenResetDialog(true);
@@ -95,6 +98,26 @@ function App() {
             setActive(false);
         }
     };
+
+    const handleCloseLeaderboardDialog = () => {
+        setOpenLeaderboardDialog(false);
+    };
+
+    const handleOpenLeaderboardDialog = async () => {
+        setOpenLeaderboardDialog(true);
+        if (!waitingForAPI) {
+            setWaitingForAPI(true);
+            try {
+                await handleGetLeaderboardFromAPI();
+            } catch (error) {
+                console.error("Failed to delete game:", error);
+            } finally {
+                setWaitingForAPI(false);
+            }
+        }
+        console.log(leaderboard)
+    };
+
 
     const handleTogglePlayPauseGame = () => {
         setActive(prevActive => !prevActive);
@@ -218,6 +241,13 @@ function App() {
                 console.log("Error: " + error);
             }
         }
+    }
+
+    const handleGetLeaderboardFromAPI = async () => {
+        api.get('/games/finished').then(response => {
+            setLeaderboard(response.data);
+            console.log(response.data);
+        }).catch(error => console.log(error));
     }
 
     useEffect(() => {
