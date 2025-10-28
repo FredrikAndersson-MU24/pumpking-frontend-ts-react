@@ -14,11 +14,12 @@ body {
     justify-content: center;
     font-family: "Cormorant Infant", fantasy;
     font-size: 1.2em;
-
+    margin: 0;
 }
 
 .app {
     width: 90vw;
+    max-width: 500px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -51,17 +52,15 @@ body {
 }
 
 .display {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 0;
+    height: 100%;
     width: 100%;
-    padding-bottom: 100%;
-
-    background-color: aliceblue;
     background-image: url("./img/background.png");
     background-size: cover;
+}
 
+.pumpkin {
+    height: 100%;
+    width: 100%;
 }
 
 .icon-row {
@@ -80,11 +79,6 @@ body {
 .action-button {
     width: 64px;
     height: 64px;
-}
-
-.pumpkin {
-    height: 100%;
-    width: 100%;
 }
 
 .dialog {

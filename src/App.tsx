@@ -8,6 +8,21 @@ import {
     TableHead, TableRow, TableCell, TableBody, Typography
 } from "@mui/material";
 import {StyledEngineProvider} from "@mui/material/styles";
+import pumpkin_1 from './img/pumpkin/pumpkin_1.png';
+import pumpkin_2 from './img/pumpkin/pumpkin_2.png';
+import pumpkin_3 from './img/pumpkin/pumpkin_3.png';
+import pumpkin_4 from './img/pumpkin/pumpkin_4.png';
+import pumpkin_5 from './img/pumpkin/pumpkin_5.png';
+import pumpkin_6 from './img/pumpkin/pumpkin_6.png';
+import pumpkin_7 from './img/pumpkin/pumpkin_7.png';
+import pumpkin_8 from './img/pumpkin/pumpkin_8.png';
+import fertilizer_1 from './img/icons/fertilizer_1.png';
+import fertilizer_1_inactive from './img/icons/fertilizer_1_inactive.png';
+import pause from './img/icons/pause.png';
+import play from './img/icons/play.png';
+import reset from './img/icons/reset.png';
+import water_can_1 from './img/icons/water_can_1.png';
+import water_can_1_inactive from './img/icons/water_can_1_inactive.png';
 
 interface Game {
     id?: number,
@@ -319,14 +334,14 @@ function App() {
     }, [currentGame.timeOfDay]);
 
     useEffect(() => {
-        const pumpkinProgress: string[] = ["src/img/pumpkin/pumpkin_1.png",
-            "src/img/pumpkin/pumpkin_2.png",
-            "src/img/pumpkin/pumpkin_3.png",
-            "src/img/pumpkin/pumpkin_4.png",
-            "src/img/pumpkin/pumpkin_5.png",
-            "src/img/pumpkin/pumpkin_6.png",
-            "src/img/pumpkin/pumpkin_7.png",
-            "src/img/pumpkin/pumpkin_8.png"];
+        const pumpkinProgress: string[] = [pumpkin_1,
+            pumpkin_2,
+            pumpkin_3,
+            pumpkin_4,
+            pumpkin_5,
+            pumpkin_6,
+            pumpkin_7,
+            pumpkin_8];
         if (currentGame.dayCount === 0) {
             setPumpkin(undefined);
         } else if (currentGame.dayCount === 1) {
@@ -356,7 +371,7 @@ function App() {
                     <div className={"top-icon-row"}>
                         <img alt="reset button"
                              onClick={handleOpenResetDialog}
-                             src={'src/img/icons/reset.png'}
+                             src={reset}
                         />
                         <button onClick={handleOpenLeaderboardDialog}>High scores</button>
                     </div>
@@ -377,15 +392,15 @@ function App() {
                     </div>
                     <div className="icon-row">
                         <img className="action-button" alt='water button'
-                             src={isActive ? 'src/img/icons/water_can_1.png' : 'src/img/icons/water_can_1_inactive.png'}
+                             src={isActive ? water_can_1 : water_can_1_inactive}
                              onClick={isActive ? handleWater : undefined}/>
                         <img className="action-button" alt="toggle play/pause button"
                              onClick={handleTogglePlayPauseGame}
-                             src={isActive ? 'src/img/icons/pause.png' : 'src/img/icons/play.png'}
+                             src={isActive ? pause : play}
                         />
                         <img className="action-button"
                              alt='fertilize button'
-                             src={!fertilizerScore && isActive ? 'src/img/icons/fertilizer_1.png' : 'src/img/icons/fertilizer_1_inactive.png'}
+                             src={!fertilizerScore && isActive ? fertilizer_1 : fertilizer_1_inactive}
                              onClick={isActive && !fertilizerScore ? handleFertilizer : undefined}/>
                     </div>
                 </div>
