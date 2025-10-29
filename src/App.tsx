@@ -386,7 +386,9 @@ function App() {
                         </div>
                     </div>
                     <div className="display">
-                        <img className="pumpkin" alt={"pumpkin state"}
+                        <img className="pumpkin"
+                             style={{visibility: pumpkin === undefined ? 'hidden' : 'visible'}}
+                             alt={"pumpkin state"}
                              src={pumpkin} hidden={pumpkin === undefined}>
                         </img>
                     </div>
