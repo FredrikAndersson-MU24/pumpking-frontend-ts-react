@@ -63,8 +63,8 @@ function App() {
     const [openResetDialog, setOpenResetDialog] = useState<boolean>(false);
     const [openEndDialog, setOpenEndDialog] = useState<boolean>(false);
     const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
-    const [openLeaderboardDialog, setOpenLeaderboardDialog] = useState<boolean>(false);
-    const [leaderboard, setLeaderboard] = useState<Array<Game>>();
+    const [openHighScoreDialog, setOpenHighScoreDialog] = useState<boolean>(false);
+    const [highScore, setHighScore] = useState<Array<Game>>();
     const [lastGameID, setLastGameID] = useState<number>();
 
 
@@ -116,24 +116,23 @@ function App() {
         }
     };
 
-    const handleCloseLeaderboardDialog = () => {
-        setOpenLeaderboardDialog(false);
+    const handleCloseHighScoreDialog = () => {
+        setOpenHighScoreDialog(false);
         setLastGameID(undefined);
     };
 
-    const handleOpenLeaderboardDialog = () => {
-        setOpenLeaderboardDialog(true);
+    const handleOpenHighScoreDialog = () => {
+        setOpenHighScoreDialog(true);
         if (!waitingForAPI) {
             setWaitingForAPI(true);
             try {
-                handleGetLeaderboardFromAPI();
+                handleGetHighScoreFromAPI();
             } catch (error) {
                 console.error("Failed to load games:", error);
             } finally {
                 setWaitingForAPI(false);
             }
         }
-        console.log(leaderboard)
     };
 
     const handleTogglePlayPauseGame = () => {
@@ -247,9 +246,9 @@ function App() {
                 "weedsScore": 0,
                 "userName": username
             }).then(response => {
-            setLeaderboard(response.data);
+            setHighScore(response.data);
             setOpenSaveDialog(false);
-            setOpenLeaderboardDialog(true);
+            setOpenHighScoreDialog(true);
             setCurrentGame(defaultGame);
             setActive(false);
         }).catch(error => {
@@ -259,9 +258,9 @@ function App() {
         });
     }
 
-    const handleGetLeaderboardFromAPI = () => {
+    const handleGetHighScoreFromAPI = () => {
         api.get('/games/finished').then(response => {
-            setLeaderboard(response.data);
+            setHighScore(response.data);
         }).catch(error => console.log(error));
     }
 
@@ -367,13 +366,13 @@ function App() {
         <>
             <StyledEngineProvider injectFirst>
                 <div className="app">
-                    <header style={{textAlign: "center", fontSize: "2.4rem"}}>Pumpking</header>
+                    <h1>Pumpking</h1>
                     <div className={"top-icon-row"}>
                         <img alt="reset button"
                              onClick={handleOpenResetDialog}
                              src={reset}
                         />
-                        <button onClick={handleOpenLeaderboardDialog}>High scores</button>
+                        <button onClick={handleOpenHighScoreDialog}>High scores</button>
                     </div>
                     <div className="status-bar">
                         <div className="status">
@@ -445,8 +444,9 @@ function App() {
                         After all your hard work it's time for the annual harvest market pumpkin competition.
                         <br/> You've managed to grow a pumpkin with a total weight
                         of <b>{(currentGame.totalScore / 1000).toFixed(3)} kgs</b>.
+                        <br/> Will it be enough to crown you the Pumpking?
                         <br/>
-                        <br/>Would you like to add your score to the leaderboard?
+                        <br/>Would you like to add your score to the high score list?
                     </DialogContent>
                     <DialogActions
                         className={'dialog-element'}
@@ -489,9 +489,9 @@ function App() {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                <Dialog className={'dialog'} open={openLeaderboardDialog}>
-                    <DialogTitle className={'dialog-element'}>Leaderboard</DialogTitle>
-                    {leaderboard === undefined ?
+                <Dialog className={'dialog'} open={openHighScoreDialog}>
+                    <DialogTitle className={'dialog-element'}>High scores</DialogTitle>
+                    {highScore === undefined ?
                         <Typography> No entries</Typography> :
                         <TableContainer sx={{maxHeight: 200, overflow: "auto"}}>
                             <Table stickyHeader size="small">
@@ -506,11 +506,11 @@ function App() {
                                 </TableHead>
                                 <TableBody>
 
-                                    {leaderboard.sort((a: Game, b: Game) => b.totalScore - a.totalScore).map((item: Game) =>
+                                    {highScore.sort((a: Game, b: Game) => b.totalScore - a.totalScore).map((item: Game) =>
                                         (
                                             <TableRow key={item.id}
                                                       className={item.id === lastGameID ? "highlighted-row" : "table-row"}>
-                                                <TableCell>{leaderboard.indexOf(item) + 1}</TableCell>
+                                                <TableCell>{highScore.indexOf(item) + 1}</TableCell>
                                                 <TableCell align="right">{item.totalScore}</TableCell>
                                                 <TableCell component="th" scope="row">
                                                     {item.userName}
@@ -522,7 +522,7 @@ function App() {
                         </TableContainer>
                     }
                     <DialogActions sx={{justifyContent: "center"}} className={'dialog-element'}>
-                        <Button onClick={() => handleCloseLeaderboardDialog()}
+                        <Button onClick={() => handleCloseHighScoreDialog()}
                                 sx={{backgroundColor: "saddlebrown", color: "black", textAlign: "center"}}>
                             Close
                         </Button>
